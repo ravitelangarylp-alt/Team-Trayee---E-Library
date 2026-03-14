@@ -5,36 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Team Trayee – E-Library</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Hind:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Hind:wght@400;500;600&display=swap" rel="stylesheet" crossorigin="anonymous" />
+
+  <!-- Cropper.js CSS — v1.6.2, confirmed live on cdnjs -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" rel="stylesheet" crossorigin="anonymous" />
 
   <style>
+    /* ═══════════════════════════════
+       BRAND TOKENS
+    ═══════════════════════════════ */
     :root {
-      --maroon:        #6A1B1A;
-      --maroon-deep:   #4A1010;
-      --maroon-light:  #8B2E2D;
-      --bg-page:       #FDEECA;
-      --bg-parchment:  #F5D98B;
-      --card-tan:      #C39D5C;
-      --card-dark:     #A8843D;
-      --text-dark:     #2C1010;
-      --text-oncard:   #1E0E00;
-      --white:         #FFFFFF;
-      --font-display:  'Tiro Devanagari Sanskrit', serif;
-      --font-body:     'Lora', serif;
-      --font-ui:       'Hind', sans-serif;
+      --maroon:       #6A1B1A;
+      --maroon-deep:  #4A1010;
+      --maroon-light: #8B2E2D;
+      --bg-page:      #FDEECA;
+      --card-tan:     #C39D5C;
+      --card-dark:    #A8843D;
+      --text-dark:    #2C1010;
+      --text-card:    #1E0E00;
+      --white:        #FFFFFF;
+      --font-display: 'Tiro Devanagari Sanskrit', serif;
+      --font-body:    'Lora', serif;
+      --font-ui:      'Hind', sans-serif;
     }
 
+    /* ═══════════════════════════════
+       RESET
+    ═══════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
       font-family: var(--font-body);
-      background-color: var(--bg-page);
+      background: var(--bg-page);
       color: var(--text-dark);
       min-height: 100vh;
     }
 
+    /* Parchment grain overlay */
     body::before {
       content: '';
       position: fixed;
@@ -44,266 +53,252 @@
       z-index: 0;
     }
 
-    /* ── HEADER ── */
+    /* ═══════════════════════════════
+       HEADER
+    ═══════════════════════════════ */
     header {
+      position: relative;
       background: var(--maroon);
       color: var(--white);
       text-align: center;
       padding: 2.8rem 1.5rem 2.2rem;
-      position: relative;
       overflow: hidden;
-      box-shadow: 0 6px 24px rgba(74,16,16,0.35);
+      box-shadow: 0 6px 24px rgba(74,16,16,.35);
+      z-index: 1;
     }
+    /* decorative corner frames */
     header::before, header::after {
       content: '';
       position: absolute;
-      width: 90px; height: 90px;
-      border: 3px solid rgba(255,255,255,0.18);
+      width: 80px; height: 80px;
+      border: 2.5px solid rgba(255,255,255,.18);
     }
-    header::before { top: 12px; left: 12px; border-right: none; border-bottom: none; }
-    header::after  { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+    header::before { top: 12px;    left: 12px;  border-right: none; border-bottom: none; }
+    header::after  { bottom: 12px; right: 12px; border-left:  none; border-top:   none; }
+
     .header-inner { position: relative; z-index: 1; }
-    .header-ornament {
-      font-size: 1.3rem;
-      letter-spacing: 0.4em;
-      opacity: 0.55;
-      margin-bottom: 0.5rem;
+
+    .header-om {
       font-family: var(--font-display);
+      font-size: 1.2rem;
+      letter-spacing: .4em;
+      opacity: .5;
+      margin-bottom: .45rem;
     }
     header h1 {
       font-family: var(--font-body);
-      font-size: clamp(1.7rem, 5vw, 2.8rem);
+      font-size: clamp(1.6rem, 4.5vw, 2.7rem);
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: .04em;
       line-height: 1.2;
-      margin-bottom: 0.5rem;
+      margin-bottom: .4rem;
     }
     header h1 span {
-      font-family: var(--font-display);
-      font-size: 0.7em;
       display: block;
-      letter-spacing: 0.12em;
-      opacity: 0.85;
+      font-family: var(--font-display);
+      font-size: .68em;
       font-weight: 400;
-      margin-bottom: 0.2rem;
+      letter-spacing: .12em;
+      opacity: .82;
+      margin-bottom: .15rem;
+    }
+    .header-rule {
+      width: 110px; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+      margin: .9rem auto .7rem;
     }
     header p {
       font-family: var(--font-ui);
-      font-size: 0.95rem;
-      opacity: 0.78;
-      letter-spacing: 0.02em;
-      max-width: 560px;
+      font-size: .93rem;
+      opacity: .76;
+      max-width: 540px;
       margin: 0 auto;
-    }
-    .header-divider {
-      width: 120px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-      margin: 1rem auto 0.8rem;
     }
 
-    /* ── CONTAINER ── */
+    /* ═══════════════════════════════
+       LAYOUT
+    ═══════════════════════════════ */
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2.5rem 1.2rem 4rem;
       position: relative;
       z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.4rem 1.2rem 4rem;
     }
 
-    /* ── SEARCH ── */
+    /* ═══════════════════════════════
+       SEARCH
+    ═══════════════════════════════ */
     .search-wrap {
-      max-width: 520px;
-      margin: 0 auto 2rem;
       position: relative;
+      max-width: 500px;
+      margin: 0 auto 1.9rem;
     }
     .search-wrap input {
       width: 100%;
-      padding: 0.75rem 1.2rem 0.75rem 3rem;
+      padding: .72rem 1.1rem .72rem 2.9rem;
       border: 2px solid var(--card-tan);
       border-radius: 50px;
-      background: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,.72);
       font-family: var(--font-ui);
-      font-size: 0.95rem;
+      font-size: .93rem;
       color: var(--text-dark);
       outline: none;
-      transition: border-color 0.25s, box-shadow 0.25s;
+      transition: border-color .22s, box-shadow .22s;
     }
     .search-wrap input:focus {
       border-color: var(--maroon);
-      box-shadow: 0 0 0 3px rgba(106,27,26,0.12);
+      box-shadow: 0 0 0 3px rgba(106,27,26,.11);
     }
     .search-icon {
       position: absolute;
-      left: 1rem;
-      top: 50%;
+      left: .95rem; top: 50%;
       transform: translateY(-50%);
-      color: var(--card-tan);
-      font-size: 1.1rem;
+      font-size: 1rem;
       pointer-events: none;
+      opacity: .55;
     }
 
-    /* ── FILTERS ── */
+    /* ═══════════════════════════════
+       FILTERS
+    ═══════════════════════════════ */
     .filters {
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 2.5rem;
+      justify-content: center;
+      gap: 9px;
+      margin-bottom: 2.2rem;
     }
     .filter-btn {
       font-family: var(--font-ui);
       font-weight: 600;
-      font-size: 0.88rem;
-      letter-spacing: 0.04em;
-      padding: 9px 22px;
+      font-size: .86rem;
+      letter-spacing: .04em;
+      padding: 8px 20px;
       border-radius: 50px;
       border: 2px solid var(--maroon);
       background: transparent;
       color: var(--maroon);
       cursor: pointer;
-      transition: background 0.22s, color 0.22s, transform 0.15s, box-shadow 0.22s;
+      transition: background .2s, color .2s, transform .14s, box-shadow .2s;
     }
-    .filter-btn:hover {
-      background: rgba(106,27,26,0.08);
-      transform: translateY(-1px);
-    }
-    .filter-btn.active {
-      background: var(--maroon);
-      color: var(--white);
-      box-shadow: 0 4px 14px rgba(106,27,26,0.35);
-    }
+    .filter-btn:hover   { background: rgba(106,27,26,.08); transform: translateY(-1px); }
+    .filter-btn.active  { background: var(--maroon); color: var(--white); box-shadow: 0 4px 14px rgba(106,27,26,.32); }
 
-    /* ── RESULTS COUNT ── */
-    .results-count {
+    /* ═══════════════════════════════
+       RESULTS LABEL
+    ═══════════════════════════════ */
+    .results-label {
       text-align: center;
       font-family: var(--font-ui);
-      font-size: 0.82rem;
+      font-size: .8rem;
+      letter-spacing: .05em;
       color: var(--maroon-light);
-      letter-spacing: 0.05em;
-      margin-bottom: 1.5rem;
-      opacity: 0.8;
+      opacity: .78;
+      margin-bottom: 1.4rem;
     }
 
-    /* ── BOOK GRID & CARDS ── */
+    /* ═══════════════════════════════
+       BOOK GRID & CARDS
+    ═══════════════════════════════ */
     .book-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 22px;
+      grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+      gap: 20px;
     }
+
     .book-card {
-      background: var(--card-tan);
-      border-radius: 14px;
-      padding: 22px 20px 18px;
-      border: 1.5px solid var(--card-dark);
-      box-shadow: 0 4px 18px rgba(74,16,16,0.14), inset 0 1px 0 rgba(255,255,255,0.18);
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
-      animation: fadeUp 0.4s ease both;
       position: relative;
       overflow: hidden;
+      background: var(--card-tan);
+      border: 1.5px solid var(--card-dark);
+      border-radius: 13px;
+      padding: 20px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 16px rgba(74,16,16,.13), inset 0 1px 0 rgba(255,255,255,.16);
+      transition: transform .2s ease, box-shadow .2s ease;
+      animation: fadeUp .38s ease both;
     }
+    /* card parchment grain */
     .book-card::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
       pointer-events: none;
       border-radius: inherit;
     }
-    .book-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 32px rgba(74,16,16,0.22);
-    }
+    .book-card:hover { transform: translateY(-5px); box-shadow: 0 11px 28px rgba(74,16,16,.2); }
+
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
+      from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
     .cat-badge {
+      position: relative; z-index: 1;
       display: inline-block;
       font-family: var(--font-ui);
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.07em;
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .07em;
       text-transform: uppercase;
-      background: var(--maroon);
-      color: var(--white);
-      padding: 3px 10px;
+      background: var(--maroon); color: var(--white);
+      padding: 2px 10px;
       border-radius: 50px;
-      margin-bottom: 10px;
-      position: relative;
-      z-index: 1;
+      margin-bottom: 9px;
     }
+
     .book-title {
+      position: relative; z-index: 1;
       font-family: var(--font-body);
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: 1.18rem; font-weight: 700;
       color: var(--maroon);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       line-height: 1.3;
-      position: relative;
-      z-index: 1;
     }
-    .book-divider {
+
+    .book-rule {
       height: 1px;
       background: linear-gradient(90deg, var(--maroon-light), transparent);
-      opacity: 0.35;
-      margin-bottom: 12px;
+      opacity: .3;
+      margin-bottom: 10px;
     }
+
     .book-meta {
+      position: relative; z-index: 1;
       font-family: var(--font-ui);
-      font-size: 0.86rem;
-      color: var(--text-oncard);
-      margin-bottom: 5px;
-      display: flex;
-      gap: 6px;
-      position: relative;
-      z-index: 1;
+      font-size: .84rem;
+      color: var(--text-card);
+      margin-bottom: 4px;
+      display: flex; gap: 6px;
     }
-    .book-meta strong {
-      color: var(--maroon);
-      font-weight: 600;
-      min-width: 76px;
-      flex-shrink: 0;
-    }
+    .book-meta strong { color: var(--maroon); font-weight: 600; min-width: 74px; flex-shrink: 0; }
+
     .card-actions {
+      position: relative; z-index: 1;
       margin-top: auto;
-      padding-top: 16px;
-      display: flex;
-      gap: 10px;
-      position: relative;
-      z-index: 1;
+      padding-top: 14px;
+      display: flex; gap: 9px;
     }
+
     .btn {
       flex: 1;
-      padding: 10px 8px;
-      border: none;
-      border-radius: 8px;
-      font-family: var(--font-ui);
-      font-weight: 600;
-      font-size: 0.84rem;
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      padding: 9px 7px;
+      border: none; border-radius: 7px;
+      font-family: var(--font-ui); font-weight: 600; font-size: .82rem;
       cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      transition: opacity 0.18s, transform 0.15s, box-shadow 0.18s;
+      text-decoration: none; text-align: center;
+      transition: opacity .16s, transform .13s;
     }
-    .btn:hover  { opacity: 0.9; transform: translateY(-1px); }
-    .btn:active { transform: scale(0.97); }
-    .btn-read {
-      background: var(--maroon);
-      color: var(--white);
-      box-shadow: 0 3px 10px rgba(106,27,26,0.3);
-    }
-    .btn-download {
-      background: var(--bg-page);
-      color: var(--maroon);
-      border: 1.5px solid var(--maroon);
-    }
+    .btn:hover  { opacity: .88; transform: translateY(-1px); }
+    .btn:active { transform: scale(.97); }
+    .btn:disabled { opacity: .38; cursor: not-allowed; transform: none; }
+
+    .btn-read     { background: var(--maroon); color: var(--white); box-shadow: 0 3px 10px rgba(106,27,26,.28); }
+    .btn-download { background: var(--bg-page, #FDEECA); color: var(--maroon); border: 1.5px solid var(--maroon); }
+
     .empty-state {
       grid-column: 1 / -1;
       text-align: center;
@@ -311,604 +306,709 @@
       font-family: var(--font-body);
       font-style: italic;
       color: var(--maroon-light);
-      opacity: 0.7;
-      font-size: 1.1rem;
+      opacity: .65;
+      font-size: 1.05rem;
     }
 
-    /* ── READING MODAL ── */
+    /* ═══════════════════════════════
+       READER MODAL
+    ═══════════════════════════════ */
     #reader-modal {
-      display: none;
+      display: none;         /* shown via JS: style.display = 'flex' */
       position: fixed;
       inset: 0;
-      background: rgba(12, 5, 5, 0.97);
+      background: #111;
       z-index: 1000;
       flex-direction: column;
     }
+
+    /* ── toolbar ── */
     .reader-toolbar {
       background: #1A0808;
-      border-bottom: 1px solid rgba(195,157,92,0.25);
-      padding: 12px 16px;
+      border-bottom: 1px solid rgba(195,157,92,.22);
+      padding: 10px 14px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       justify-content: space-between;
+      flex-shrink: 0;
     }
+
     .toolbar-title {
       font-family: var(--font-body);
-      font-size: 0.95rem;
+      font-size: .92rem; font-style: italic;
       color: var(--card-tan);
-      font-style: italic;
-      flex: 1;
-      min-width: 120px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      flex: 1; min-width: 100px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
+
     .toolbar-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
+      display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
     }
+
     .toolbar-group button {
       font-family: var(--font-ui);
-      font-size: 0.82rem;
-      font-weight: 600;
-      background: #2A1010;
-      color: #D4A96A;
-      border: 1px solid rgba(195,157,92,0.3);
-      padding: 7px 13px;
-      border-radius: 6px;
+      font-size: .8rem; font-weight: 600;
+      background: #2A1010; color: #D4A96A;
+      border: 1px solid rgba(195,157,92,.28);
+      padding: 6px 12px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.18s;
+      transition: background .16s;
       white-space: nowrap;
     }
     .toolbar-group button:hover { background: #3A1818; }
+
     .page-info {
       font-family: var(--font-ui);
-      font-size: 0.82rem;
-      color: rgba(195,157,92,0.7);
-      padding: 0 4px;
+      font-size: .8rem;
+      color: rgba(195,157,92,.68);
+      padding: 0 3px;
       white-space: nowrap;
     }
-    .btn-snippet      { background: rgba(195,157,92,0.15) !important; color: var(--card-tan) !important; border-color: rgba(195,157,92,0.5) !important; }
-    .btn-close-modal  { background: rgba(139,30,30,0.35) !important;  color: #F5A0A0 !important;         border-color: rgba(139,30,30,0.5) !important; }
-    .btn-confirm-crop { background: rgba(34,120,60,0.3) !important;   color: #7EE8A2 !important;         border-color: rgba(34,120,60,0.5) !important; }
-    .btn-cancel-crop  { background: rgba(139,30,30,0.3) !important;   color: #F5A0A0 !important;         border-color: rgba(139,30,30,0.4) !important; }
+
+    /* toolbar button variants */
+    #btn-snippet      { background: rgba(195,157,92,.13) !important; color: var(--card-tan) !important; border-color: rgba(195,157,92,.45) !important; }
+    #btn-close        { background: rgba(139,30,30,.32)  !important; color: #F5A0A0       !important; border-color: rgba(139,30,30,.5)   !important; }
+    #btn-confirm-crop { background: rgba(34,120,60,.28)  !important; color: #7EE8A2       !important; border-color: rgba(34,120,60,.5)   !important; }
+    #btn-cancel-crop  { background: rgba(139,30,30,.28)  !important; color: #F5A0A0       !important; border-color: rgba(139,30,30,.45)  !important; }
+
+    /* crop actions hidden by default */
     #crop-actions { display: none; }
-    .canvas-container {
+
+    /* ── canvas area ── */
+    .canvas-area {
       flex: 1;
       overflow: auto;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 24px 20px;
+      padding: 22px 18px;
       position: relative;
     }
+
+    /* ── spinner ── */
     .pdf-loader {
       display: none;
-      position: absolute;
-      inset: 0;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 14px;
+      position: absolute; inset: 0;
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 12px;
       color: var(--card-tan);
-      font-family: var(--font-ui);
-      font-size: 0.9rem;
+      font-family: var(--font-ui); font-size: .88rem;
     }
-    .pdf-loader.visible { display: flex; }
+    .pdf-loader.on { display: flex; }
     .spinner {
-      width: 38px; height: 38px;
-      border: 3px solid rgba(195,157,92,0.2);
+      width: 36px; height: 36px;
+      border: 3px solid rgba(195,157,92,.18);
       border-top-color: var(--card-tan);
       border-radius: 50%;
-      animation: spin 0.85s linear infinite;
+      animation: spin .8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    #pdf-canvas {
-      box-shadow: 0 8px 40px rgba(0,0,0,0.7);
-      max-width: 100%;
-      height: auto;
-      transition: opacity 0.28s ease;
-      display: block;
-    }
-    #crop-image-container { display: none; max-width: 100%; }
-    #crop-image           { max-width: 100%; }
-    .reader-error {
+
+    /* ── error panel ── */
+    .pdf-error {
       display: none;
-      position: absolute;
-      inset: 0;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 12px;
+      position: absolute; inset: 0;
+      align-items: center; justify-content: center;
+      flex-direction: column; gap: 10px;
       color: var(--card-tan);
-      font-family: var(--font-ui);
-      font-size: 0.9rem;
-      text-align: center;
-      padding: 2rem;
+      font-family: var(--font-ui); font-size: .88rem;
+      text-align: center; padding: 2rem;
     }
-    .reader-error.visible { display: flex; }
-    .reader-error-icon { font-size: 2.5rem; opacity: 0.5; }
-    .reader-error a { color: var(--card-tan); font-weight: 600; text-decoration: underline; opacity: 0.9; }
+    .pdf-error.on  { display: flex; }
+    .pdf-error-ico { font-size: 2.2rem; opacity: .48; }
+    .pdf-error a   { color: var(--card-tan); font-weight: 600; text-decoration: underline; }
 
-    /* ── FOOTER ── */
+    /* ── PDF canvas ── */
+    #pdf-canvas {
+      display: block;
+      max-width: 100%; height: auto;
+      box-shadow: 0 8px 38px rgba(0,0,0,.72);
+      transition: opacity .26s ease;
+    }
+
+    /* ── cropper image ── */
+    #crop-wrap { display: none; max-width: 100%; }
+    #crop-img  { max-width: 100%; display: block; }
+
+    /* ═══════════════════════════════
+       FOOTER
+    ═══════════════════════════════ */
     footer {
+      position: relative; z-index: 1;
       background: var(--maroon);
-      color: rgba(255,255,255,0.65);
+      color: rgba(255,255,255,.62);
       text-align: center;
-      padding: 1.4rem 1rem;
+      padding: 1.3rem 1rem;
       font-family: var(--font-ui);
-      font-size: 0.82rem;
-      letter-spacing: 0.03em;
-      position: relative;
-      z-index: 1;
+      font-size: .8rem;
+      letter-spacing: .03em;
     }
-    footer strong { color: rgba(255,255,255,0.9); }
+    footer strong { color: rgba(255,255,255,.9); }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 600px) {
-      .reader-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .toolbar-title  { display: none; }
-      .toolbar-group  { width: 100%; }
-      .toolbar-group button { flex: 1; font-size: 0.78rem; padding: 7px 8px; }
+    /* ═══════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════ */
+    @media (max-width: 580px) {
+      .reader-toolbar   { flex-direction: column; align-items: flex-start; }
+      .toolbar-title    { display: none; }
+      .toolbar-group    { width: 100%; }
+      .toolbar-group button { flex: 1; padding: 7px 6px; font-size: .76rem; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="header-inner">
-      <div class="header-ornament">✦ ॐ ✦</div>
-      <h1>
-        <span>Team Trayee</span>
-        E-Library
-      </h1>
-      <div class="header-divider"></div>
-      <p>Preserving and exploring the profound wisdom of ancient Sanskrit literature</p>
-    </div>
-  </header>
+<!-- ══════════════ HEADER ══════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="header-om">✦ ॐ ✦</div>
+    <h1><span>Team Trayee</span>E-Library</h1>
+    <div class="header-rule"></div>
+    <p>Preserving and exploring the profound wisdom of ancient Sanskrit literature</p>
+  </div>
+</header>
 
-  <div class="container">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="search" id="search-input" placeholder="Search by title or author…" aria-label="Search books" />
-    </div>
+<!-- ══════════════ MAIN ══════════════ -->
+<div class="container">
 
-    <div class="filters" id="filter-container" role="group" aria-label="Filter by category">
-      <button class="filter-btn active" data-filter="All">All</button>
-      <button class="filter-btn" data-filter="Ayurveda">Ayurveda</button>
-      <button class="filter-btn" data-filter="Vyakarana">Vyakarana</button>
-      <button class="filter-btn" data-filter="Vedanta">Vedanta</button>
-      <button class="filter-btn" data-filter="Kavya">Kavya</button>
-    </div>
-
-    <div class="results-count" id="results-count" aria-live="polite"></div>
-    <div class="book-grid" id="book-grid" role="list"></div>
+  <!-- Search -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="search" id="search-input" placeholder="Search by title or author…" aria-label="Search books" />
   </div>
 
-  <footer>
-    <strong>Team Trayee – E-Library</strong> &nbsp;|&nbsp; Dedicated to the promotion of Sanskrit knowledge
-  </footer>
+  <!-- Filters -->
+  <div class="filters" id="filter-bar" role="group" aria-label="Filter by category">
+    <button class="filter-btn active" data-filter="All">All</button>
+    <button class="filter-btn" data-filter="Ayurveda">Ayurveda</button>
+    <button class="filter-btn" data-filter="Vyakarana">Vyakarana</button>
+    <button class="filter-btn" data-filter="Vedanta">Vedanta</button>
+    <button class="filter-btn" data-filter="Kavya">Kavya</button>
+  </div>
 
-  <div id="reader-modal" role="dialog" aria-modal="true" aria-labelledby="modal-book-title" tabindex="-1">
-    <div class="reader-toolbar">
-      <div class="toolbar-title" id="modal-book-title">–</div>
+  <!-- Results label -->
+  <div class="results-label" id="results-label" aria-live="polite"></div>
 
-      <div class="toolbar-group" id="nav-controls">
-        <button id="prev-page" aria-label="Previous page">⬅ Prev</button>
-        <span class="page-info">
-          <span id="page-num">–</span> / <span id="page-count">–</span>
-        </span>
-        <button id="next-page" aria-label="Next page">Next ➡</button>
-      </div>
+  <!-- Grid -->
+  <div class="book-grid" id="book-grid" role="list"></div>
 
-      <div class="toolbar-group" id="standard-actions">
-        <button class="btn-snippet" id="start-snippet" aria-label="Take a snippet of the current page">✂️ Snippet</button>
-        <button class="btn-close-modal" id="close-modal" aria-label="Close reader">✖ Close</button>
-      </div>
+</div>
 
-      <div class="toolbar-group" id="crop-actions">
-        <button class="btn-confirm-crop" id="confirm-crop" aria-label="Download cropped snippet">✅ Download Snippet</button>
-        <button class="btn-cancel-crop"  id="cancel-crop"  aria-label="Cancel snippet">❌ Cancel</button>
-      </div>
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <strong>Team Trayee – E-Library</strong> &nbsp;|&nbsp; Dedicated to the promotion of Sanskrit knowledge
+</footer>
+
+<!-- ══════════════ READER MODAL ══════════════ -->
+<div id="reader-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+
+  <div class="reader-toolbar">
+    <div class="toolbar-title" id="modal-title">–</div>
+
+    <!-- Nav controls -->
+    <div class="toolbar-group" id="nav-group">
+      <button id="btn-prev" aria-label="Previous page">⬅ Prev</button>
+      <span class="page-info" id="page-info">– / –</span>
+      <button id="btn-next" aria-label="Next page">Next ➡</button>
     </div>
 
-    <div class="canvas-container" id="canvas-container">
-      <div class="pdf-loader" id="pdf-loader">
-        <div class="spinner"></div>
-        <span>Loading manuscript…</span>
-      </div>
-      <div class="reader-error" id="reader-error">
-        <div class="reader-error-icon">📜</div>
-        <p>This PDF could not be loaded in the browser reader.<br>This is usually due to cross-origin restrictions.</p>
-        <p><a id="error-download-link" href="#">Download the file instead ⬇</a></p>
-      </div>
-      <canvas id="pdf-canvas"></canvas>
-      <div id="crop-image-container">
-        <img id="crop-image" src="" alt="Page ready for cropping" />
-      </div>
+    <!-- Standard actions -->
+    <div class="toolbar-group" id="std-actions">
+      <button id="btn-snippet" aria-label="Take snippet">✂️ Take Snippet</button>
+      <button id="btn-close"   aria-label="Close reader">✖ Close</button>
+    </div>
+
+    <!-- Crop actions (hidden until snippet mode) -->
+    <div class="toolbar-group" id="crop-actions">
+      <button id="btn-confirm-crop" aria-label="Download snippet">✅ Download Snippet</button>
+      <button id="btn-cancel-crop"  aria-label="Cancel snippet">❌ Cancel</button>
     </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  <div class="canvas-area">
+    <!-- Spinner -->
+    <div class="pdf-loader" id="pdf-loader">
+      <div class="spinner"></div>
+      <span>Loading manuscript…</span>
+    </div>
 
-  <script>
-    /* ─────────────────────────────────────────────
-       BOOK DATA
-       • readLink    → local path inside your GitHub repo (books/ folder)
-       • downloadLink → Google Drive direct download (unchanged)
-       • fileName    → controls the saved filename on the user's device
-    ───────────────────────────────────────────── */
-    const books = [
-      {
-        title:        'Ashtanga Hridayam',
-        author:       'Vagbhata',
-        category:     'Ayurveda',
-        language:     'Sanskrit',
-        publisher:    'Chaukambha Orientalia',
-        year:         '2024',
-        // FIX 3: local path → no CORS, works on GitHub Pages
-        readLink:     'books/Ashtanga_Hridayam.pdf',
-        // FIX 1 & 2: Google Drive link kept; download attr renames the file
-        downloadLink: 'https://drive.google.com/uc?export=download&id=1mzKYuBSjwxh12hRxrfFx0u10xGWEU109',
-        // FIX 2: exact filename format requested
-        fileName:     'Ashtanga Hridayam - Team trayee.pdf',
-      },
-      {
-        title:        'Charaka Samhita',
-        author:       'Charaka',
-        category:     'Ayurveda',
-        language:     'Sanskrit',
-        publisher:    'Chaukambha Sanskrit Pratishthan',
-        year:         '2019',
-        readLink:     null,
-        downloadLink: null,
-        fileName:     null,
-      },
-      {
-        title:        'Siddhanta Kaumudi',
-        author:       'Bhattoji Dikshita',
-        category:     'Vyakarana',
-        language:     'Sanskrit',
-        publisher:    'Motilal Banarsidass',
-        year:         '2020',
-        readLink:     null,
-        downloadLink: null,
-        fileName:     null,
-      },
-      {
-        title:        'Ashtadhyayi',
-        author:       'Panini',
-        category:     'Vyakarana',
-        language:     'Sanskrit',
-        publisher:    'Sahitya Akademi',
-        year:         '2015',
-        readLink:     null,
-        downloadLink: null,
-        fileName:     null,
-      },
-      {
-        title:        'Brahma Sutra Bhashya',
-        author:       'Adi Shankaracharya',
-        category:     'Vedanta',
-        language:     'Sanskrit',
-        publisher:    'Gita Press Gorakhpur',
-        year:         '2018',
-        readLink:     null,
-        downloadLink: null,
-        fileName:     null,
-      },
-      {
-        title:        'Vivekachudamani',
-        author:       'Adi Shankaracharya',
-        category:     'Vedanta',
-        language:     'Sanskrit',
-        publisher:    'Ramakrishna Math',
-        year:         '2017',
-        readLink:     null,
-        downloadLink: null,
-        fileName:     null,
-      },
-      {
-        title:        'Meghadutam',
-        author:       'Kalidasa',
-        category:     'Kavya',
-        language:     'Sanskrit',
-        publisher:    'Sahitya Akademi',
-        year:         '2015',
-        readLink:     null,
-        downloadLink: null,
-        fileName:     null,
-      },
-      {
-        title:        'Raghuvamsham',
-        author:       'Kalidasa',
-        category:     'Kavya',
-        language:     'Sanskrit',
-        publisher:    'Chaukambha Vidyabhavan',
-        year:         '2021',
-        readLink:     null,
-        downloadLink: null,
-        fileName:     null,
-      },
-    ];
+    <!-- Error panel -->
+    <div class="pdf-error" id="pdf-error">
+      <div class="pdf-error-ico">📜</div>
+      <p id="pdf-error-msg">Could not load the PDF.</p>
+      <p><a id="pdf-error-dl" href="#">Download the file instead ⬇</a></p>
+    </div>
 
-    /* ─────────────────────────────────────────────
-       RENDER BOOKS
-    ───────────────────────────────────────────── */
-    const grid        = document.getElementById('book-grid');
-    const countEl     = document.getElementById('results-count');
-    const filterBtns  = document.querySelectorAll('.filter-btn');
-    const searchInput = document.getElementById('search-input');
+    <!-- PDF canvas -->
+    <canvas id="pdf-canvas"></canvas>
 
-    let currentFilter = 'All';
-    let currentSearch = '';
+    <!-- Cropper target -->
+    <div id="crop-wrap"><img id="crop-img" src="" alt="Page for cropping" /></div>
+  </div>
 
-    function escapeHtml(str) {
-      const d = document.createElement('div');
-      d.appendChild(document.createTextNode(str));
-      return d.innerHTML;
+</div><!-- /#reader-modal -->
+
+
+<!-- ══════════════════════════════════════════════════
+     EXTERNAL SCRIPTS
+     crossorigin="anonymous" → browser reports real
+     error messages instead of a generic "Script error"
+══════════════════════════════════════════════════ -->
+
+<!-- PDF.js v3.11.174 — main + worker must match exactly -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+  crossorigin="anonymous"
+></script>
+
+<!-- Cropper.js v1.6.2 -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"
+  crossorigin="anonymous"
+></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   Wait for DOM to be fully parsed before touching any element
+═══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ──────────────────────────────────────────────────────
+     PDF.js worker
+     Full absolute URL prevents "Invalid URL" warnings that
+     occur when PDF.js v2 tried to resolve a relative path
+     on a file:// or GitHub Pages origin.
+  ────────────────────────────────────────────────────── */
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  /* ──────────────────────────────────────────────────────
+     BOOK DATA
+     readLink    : relative path inside the repo   (./books/)
+     downloadLink: Google Drive direct-download URL
+     Note: ./books/ is more explicit than books/ and resolves
+     correctly on GitHub Pages regardless of the base URL.
+  ────────────────────────────────────────────────────── */
+  var books = [
+    {
+      title:        'Ashtanga Hridayam',
+      author:       'Vagbhata',
+      category:     'Ayurveda',
+      language:     'Sanskrit',
+      publisher:    'Chaukambha Orientalia',
+      year:         '2024',
+      readLink:     './books/Ashtanga_Hridayam.pdf',
+      downloadLink: 'https://drive.google.com/uc?export=download&id=1mzKYuBSjwxh12hRxrfFx0u10xGWEU109'
+    },
+    {
+      title:        'Charaka Samhita',
+      author:       'Charaka',
+      category:     'Ayurveda',
+      language:     'Sanskrit',
+      publisher:    'Chaukambha Sanskrit Pratishthan',
+      year:         '2019',
+      readLink:     null,
+      downloadLink: null
+    },
+    {
+      title:        'Siddhanta Kaumudi',
+      author:       'Bhattoji Dikshita',
+      category:     'Vyakarana',
+      language:     'Sanskrit',
+      publisher:    'Motilal Banarsidass',
+      year:         '2020',
+      readLink:     null,
+      downloadLink: null
+    },
+    {
+      title:        'Brahma Sutra Bhashya',
+      author:       'Adi Shankaracharya',
+      category:     'Vedanta',
+      language:     'Sanskrit',
+      publisher:    'Gita Press Gorakhpur',
+      year:         '2018',
+      readLink:     null,
+      downloadLink: null
+    },
+    {
+      title:        'Meghadutam',
+      author:       'Kalidasa',
+      category:     'Kavya',
+      language:     'Sanskrit',
+      publisher:    'Sahitya Akademi',
+      year:         '2015',
+      readLink:     null,
+      downloadLink: null
+    }
+  ];
+
+  /* ──────────────────────────────────────────────────────
+     DOM REFERENCES
+  ────────────────────────────────────────────────────── */
+  var grid         = document.getElementById('book-grid');
+  var resultsLabel = document.getElementById('results-label');
+  var searchInput  = document.getElementById('search-input');
+  var filterBar    = document.getElementById('filter-bar');
+
+  var modal        = document.getElementById('reader-modal');
+  var modalTitle   = document.getElementById('modal-title');
+  var pageInfo     = document.getElementById('page-info');
+
+  var btnPrev      = document.getElementById('btn-prev');
+  var btnNext      = document.getElementById('btn-next');
+  var btnSnippet   = document.getElementById('btn-snippet');
+  var btnClose     = document.getElementById('btn-close');
+  var btnConfirm   = document.getElementById('btn-confirm-crop');
+  var btnCancel    = document.getElementById('btn-cancel-crop');
+
+  var navGroup     = document.getElementById('nav-group');
+  var stdActions   = document.getElementById('std-actions');
+  var cropActions  = document.getElementById('crop-actions');
+
+  var pdfLoader    = document.getElementById('pdf-loader');
+  var pdfError     = document.getElementById('pdf-error');
+  var pdfErrorMsg  = document.getElementById('pdf-error-msg');
+  var pdfErrorDl   = document.getElementById('pdf-error-dl');
+
+  var canvas       = document.getElementById('pdf-canvas');
+  var ctx          = canvas.getContext('2d');
+  var cropWrap     = document.getElementById('crop-wrap');
+  var cropImg      = document.getElementById('crop-img');
+
+  /* ──────────────────────────────────────────────────────
+     STATE
+  ────────────────────────────────────────────────────── */
+  var currentFilter   = 'All';
+  var currentSearch   = '';
+  var currentDlLink   = '';
+
+  var pdfDoc          = null;
+  var pageNum         = 1;
+  var pageRendering   = false;
+  var pendingPage     = null;
+  var cropperInstance = null;
+
+  /* ──────────────────────────────────────────────────────
+     HELPERS
+  ────────────────────────────────────────────────────── */
+  function safe(str) {
+    /* XSS-safe: use a text node instead of innerHTML for user data */
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(str || ''));
+    return d.innerHTML;
+  }
+
+  function loaderOn()  { pdfLoader.classList.add('on'); canvas.style.display = 'none'; }
+  function loaderOff() { pdfLoader.classList.remove('on'); canvas.style.display = 'block'; }
+
+  function errorOn(msg, dlLink) {
+    pdfError.classList.add('on');
+    pdfErrorMsg.textContent = msg || 'Could not load the PDF.';
+    pdfErrorDl.href = dlLink || '#';
+    pdfLoader.classList.remove('on');
+    canvas.style.display = 'none';
+  }
+  function errorOff() { pdfError.classList.remove('on'); }
+
+  /* ──────────────────────────────────────────────────────
+     RENDER BOOKS
+  ────────────────────────────────────────────────────── */
+  function renderBooks() {
+    var q = currentSearch.trim().toLowerCase();
+    var list = books.filter(function (b) {
+      var catOk   = currentFilter === 'All' || b.category === currentFilter;
+      var queryOk = !q || b.title.toLowerCase().indexOf(q) !== -1 ||
+                        b.author.toLowerCase().indexOf(q) !== -1;
+      return catOk && queryOk;
+    });
+
+    grid.innerHTML = '';
+
+    if (list.length === 0) {
+      grid.innerHTML = '<div class="empty-state">No manuscripts found.</div>';
+      resultsLabel.textContent = '';
+      return;
     }
 
-    function renderBooks() {
-      const query    = currentSearch.trim().toLowerCase();
-      const filtered = books.filter(b => {
-        const catMatch   = currentFilter === 'All' || b.category === currentFilter;
-        const queryMatch = !query ||
-          b.title.toLowerCase().includes(query) ||
-          b.author.toLowerCase().includes(query);
-        return catMatch && queryMatch;
-      });
+    resultsLabel.textContent =
+      list.length + (list.length === 1 ? ' manuscript' : ' manuscripts');
 
-      grid.innerHTML = '';
+    list.forEach(function (book, i) {
+      var hasRead = Boolean(book.readLink);
+      var hasDl   = Boolean(book.downloadLink);
 
-      if (filtered.length === 0) {
-        grid.innerHTML = '<div class="empty-state">No manuscripts found matching your search.</div>';
-        countEl.textContent = '0 books';
-        return;
-      }
+      var card = document.createElement('div');
+      card.className = 'book-card';
+      card.setAttribute('role', 'listitem');
+      card.style.animationDelay = (i * 0.05) + 's';
 
-      countEl.textContent = filtered.length + (filtered.length === 1 ? ' manuscript' : ' manuscripts');
+      /* build download button:
+         FIX 1: no target="_blank"
+         FIX 2: download="${title} - Team trayee.pdf"  */
+      var dlBtn = hasDl
+        ? '<a href="' + safe(book.downloadLink) + '"'
+          + ' class="btn btn-download"'
+          + ' download="' + safe(book.title) + ' - Team trayee.pdf"'
+          + ' aria-label="Download ' + safe(book.title) + '"'
+          + '>⬇ Download</a>'
+        : '<button class="btn btn-download" disabled'
+          + ' title="Not available yet" style="opacity:.38">⬇ Download</button>';
 
-      filtered.forEach((book, i) => {
-        const card = document.createElement('div');
-        card.className = 'book-card';
-        card.setAttribute('role', 'listitem');
-        card.style.animationDelay = (i * 0.05) + 's';
+      card.innerHTML =
+        '<span class="cat-badge">' + safe(book.category) + '</span>'
+        + '<h2 class="book-title">' + safe(book.title) + '</h2>'
+        + '<div class="book-rule"></div>'
+        + '<div class="book-meta"><strong>Author:</strong><span>'    + safe(book.author)    + '</span></div>'
+        + '<div class="book-meta"><strong>Language:</strong><span>'  + safe(book.language)  + '</span></div>'
+        + '<div class="book-meta"><strong>Publisher:</strong><span>' + safe(book.publisher) + '</span></div>'
+        + '<div class="book-meta"><strong>Year:</strong><span>'      + safe(book.year)      + '</span></div>'
+        + '<div class="card-actions">'
+        +   '<button class="btn btn-read"'
+        +     (hasRead ? '' : ' disabled title="Reader not available yet"')
+        +     ' data-read="'     + (hasRead ? safe(book.readLink)     : '') + '"'
+        +     ' data-title="'    + safe(book.title) + '"'
+        +     ' data-download="' + (hasDl ? safe(book.downloadLink) : '') + '"'
+        +     ' aria-label="Read ' + safe(book.title) + ' online"'
+        +   '>📖 Read Online</button>'
+        +   dlBtn
+        + '</div>';
 
-        const hasRead     = Boolean(book.readLink);
-        const hasDownload = Boolean(book.downloadLink);
+      grid.appendChild(card);
+    });
+  }
 
-        /*
-          FIX 1: No target="_blank" on the download anchor.
-          FIX 2: download="${book.title} - Team trayee.pdf" renames the saved file.
-          FIX 3: readLink points to local books/ folder (set in data above).
-        */
-        card.innerHTML = `
-          <span class="cat-badge">${escapeHtml(book.category)}</span>
-          <h2 class="book-title">${escapeHtml(book.title)}</h2>
-          <div class="book-divider"></div>
-          <div class="book-meta"><strong>Author:</strong>    <span>${escapeHtml(book.author)}</span></div>
-          <div class="book-meta"><strong>Language:</strong>  <span>${escapeHtml(book.language)}</span></div>
-          <div class="book-meta"><strong>Publisher:</strong> <span>${escapeHtml(book.publisher)}</span></div>
-          <div class="book-meta"><strong>Year:</strong>      <span>${escapeHtml(book.year)}</span></div>
-          <div class="card-actions">
-            <button
-              class="btn btn-read"
-              data-read="${hasRead ? escapeHtml(book.readLink) : ''}"
-              data-title="${escapeHtml(book.title)}"
-              data-download="${hasDownload ? escapeHtml(book.downloadLink) : ''}"
-              ${!hasRead ? 'disabled title="Reader not available yet"' : ''}
-              aria-label="Read ${escapeHtml(book.title)} online"
-            >📖 Read Online</button>
+  renderBooks();
 
-            ${hasDownload
-              /* FIX 1: no target="_blank"
-                 FIX 2: download attribute = "Book Title - Team trayee.pdf" */
-              ? `<a
-                   href="${escapeHtml(book.downloadLink)}"
-                   class="btn btn-download"
-                   download="${escapeHtml(book.title)} - Team trayee.pdf"
-                   aria-label="Download ${escapeHtml(book.title)}"
-                 >⬇ Download</a>`
-              : `<button class="btn btn-download" disabled
-                   title="Download not available yet"
-                   style="opacity:0.45;">⬇ Download</button>`
-            }
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
+  /* ──────────────────────────────────────────────────────
+     FILTER & SEARCH
+  ────────────────────────────────────────────────────── */
+  filterBar.addEventListener('click', function (e) {
+    var btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(function (b) {
+      b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
     renderBooks();
+  });
 
-    /* Filter */
-    document.getElementById('filter-container').addEventListener('click', e => {
-      const btn = e.target.closest('.filter-btn');
-      if (!btn) return;
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter = btn.dataset.filter;
-      renderBooks();
-    });
+  searchInput.addEventListener('input', function (e) {
+    currentSearch = e.target.value;
+    renderBooks();
+  });
 
-    /* Search */
-    searchInput.addEventListener('input', e => {
-      currentSearch = e.target.value;
-      renderBooks();
-    });
+  /* ──────────────────────────────────────────────────────
+     OPEN READER  (event delegation — no global needed)
+  ────────────────────────────────────────────────────── */
+  grid.addEventListener('click', function (e) {
+    var btn = e.target.closest('.btn-read');
+    if (!btn || btn.disabled) return;
+    openReader(btn.dataset.read, btn.dataset.title, btn.dataset.download);
+  });
 
-    /* Read button (event delegation — no global function needed) */
-    grid.addEventListener('click', e => {
-      const btn = e.target.closest('.btn-read');
-      if (!btn || btn.disabled) return;
-      openReader(btn.dataset.read, btn.dataset.title, btn.dataset.download);
-    });
+  /* ──────────────────────────────────────────────────────
+     PDF RENDERING
+  ────────────────────────────────────────────────────── */
+  function renderPage(num) {
+    pageRendering      = true;
+    canvas.style.opacity = '0';
 
-    /* ─────────────────────────────────────────────
-       PDF.js
-    ───────────────────────────────────────────── */
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    pdfDoc.getPage(num).then(function (page) {
+      /* Scale to fit the viewport width */
+      var scale    = Math.min(1.6, (window.innerWidth - 48) / page.getViewport({ scale: 1 }).width);
+      var viewport = page.getViewport({ scale: scale });
 
-    let pdfDoc           = null;
-    let pageNum          = 1;
-    let pageIsRendering  = false;
-    let pageNumIsPending = null;
-    let currentDownload  = '';
+      canvas.width  = viewport.width;
+      canvas.height = viewport.height;
 
-    const canvas      = document.getElementById('pdf-canvas');
-    const ctx         = canvas.getContext('2d');
-    const modal       = document.getElementById('reader-modal');
-    const loader      = document.getElementById('pdf-loader');
-    const errorPanel  = document.getElementById('reader-error');
-    const errorDlLink = document.getElementById('error-download-link');
+      page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function () {
+        pageRendering        = false;
+        canvas.style.opacity = '1';
+        pageInfo.textContent = num + ' / ' + pdfDoc.numPages;
 
-    function showLoader(show) {
-      loader.classList.toggle('visible', show);
-      canvas.style.display = show ? 'none' : 'block';
-    }
-
-    function showError(show, dlLink) {
-      errorPanel.classList.toggle('visible', show);
-      if (show) {
-        errorDlLink.href     = dlLink || '#';
-        canvas.style.display = 'none';
-        loader.classList.remove('visible');
-      }
-    }
-
-    const renderPage = num => {
-      pageIsRendering      = true;
-      canvas.style.opacity = 0;
-
-      pdfDoc.getPage(num).then(page => {
-        const scale    = Math.min(1.6, (window.innerWidth - 48) / page.getViewport({ scale: 1 }).width);
-        const viewport = page.getViewport({ scale });
-        canvas.height  = viewport.height;
-        canvas.width   = viewport.width;
-
-        page.render({ canvasContext: ctx, viewport }).promise.then(() => {
-          pageIsRendering      = false;
-          canvas.style.opacity = 1;
-          document.getElementById('page-num').textContent = num;
-          if (pageNumIsPending !== null) {
-            renderPage(pageNumIsPending);
-            pageNumIsPending = null;
-          }
-        });
+        if (pendingPage !== null) {
+          renderPage(pendingPage);
+          pendingPage = null;
+        }
+      }).catch(function (err) {
+        pageRendering = false;
+        console.error('[TT] page.render error:', err);
+        errorOn('Page render failed: ' + err.message, currentDlLink);
       });
-    };
+    }).catch(function (err) {
+      pageRendering = false;
+      console.error('[TT] getPage error:', err);
+      errorOn('Could not get page ' + num + ': ' + err.message, currentDlLink);
+    });
+  }
 
-    const queueRenderPage = num => {
-      if (pageIsRendering) pageNumIsPending = num;
-      else renderPage(num);
-    };
+  function queuePage(num) {
+    if (pageRendering) { pendingPage = num; }
+    else               { renderPage(num); }
+  }
 
-    /* Open modal */
-    function openReader(url, title, dlLink) {
-      pdfDoc = null;
-      pageNum = 1;
-      currentDownload = dlLink || '#';
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      document.getElementById('page-num').textContent   = '–';
-      document.getElementById('page-count').textContent = '–';
-      document.getElementById('modal-book-title').textContent = title || '–';
-      showError(false);
-      showLoader(true);
+  /* ──────────────────────────────────────────────────────
+     OPEN / CLOSE MODAL
+  ────────────────────────────────────────────────────── */
+  function openReader(url, title, dlLink) {
+    /* reset all state */
+    pdfDoc = null;
+    pageNum = 1;
+    currentDlLink = dlLink || '';
+    pendingPage   = null;
+    pageRendering = false;
 
-      modal.style.display          = 'flex';
-      document.body.style.overflow = 'hidden';
-      modal.focus();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    modalTitle.textContent  = title || '–';
+    pageInfo.textContent    = '– / –';
+    errorOff();
+    loaderOn();
 
-      pdfjsLib.getDocument(url).promise
-        .then(doc => {
+    modal.style.display          = 'flex';
+    document.body.style.overflow = 'hidden';
+    modal.focus();
+
+    /* ── robust PDF loading with try/catch + .catch ── */
+    try {
+      var loadingTask = pdfjsLib.getDocument(url);
+
+      loadingTask.promise
+        .then(function (doc) {
           pdfDoc = doc;
-          document.getElementById('page-count').textContent = doc.numPages;
-          showLoader(false);
+          loaderOff();
           renderPage(pageNum);
         })
-        .catch(() => showError(true, currentDownload));
+        .catch(function (err) {
+          /* Catches 404s, malformed PDF, CORS blocks, etc. */
+          console.error('[TT] getDocument failed:', err);
+
+          var msg = 'Could not load the PDF.';
+          if (err && err.message) {
+            /* Surface specific errors to help with debugging */
+            if (err.message.indexOf('404') !== -1 || err.status === 404) {
+              msg = 'File not found (404). '
+                  + 'Make sure "' + url + '" exists in your GitHub repo '
+                  + 'and that GitHub Pages has finished deploying.';
+            } else if (err.message.toLowerCase().indexOf('cors') !== -1) {
+              msg = 'CORS error: the server blocked the PDF request. '
+                  + 'Try downloading the file instead.';
+            } else {
+              msg = 'PDF load error: ' + err.message;
+            }
+          }
+          errorOn(msg, currentDlLink);
+          alert('⚠️ ' + msg);   /* user-friendly alert as requested */
+        });
+
+    } catch (syncErr) {
+      /* Catches any synchronous throw from pdfjsLib.getDocument() itself */
+      console.error('[TT] getDocument threw synchronously:', syncErr);
+      var syncMsg = 'PDF reader error: ' + (syncErr.message || syncErr);
+      errorOn(syncMsg, currentDlLink);
+      alert('⚠️ ' + syncMsg);
     }
+  }
 
-    /* Close modal */
-    function closeReader() {
-      modal.style.display          = 'none';
-      document.body.style.overflow = 'auto';
-      if (cropperInstance) cancelSnippet();
+  function closeReader() {
+    modal.style.display          = 'none';
+    document.body.style.overflow = 'auto';
+    if (cropperInstance) cancelSnippet();
+    errorOff();
+    loaderOff();
+  }
+
+  btnClose.addEventListener('click', closeReader);
+
+  /* Keyboard shortcuts inside modal */
+  modal.addEventListener('keydown', function (e) {
+    switch (e.key) {
+      case 'Escape':     closeReader();          break;
+      case 'ArrowLeft':  prevPage();             break;
+      case 'ArrowRight': nextPage();             break;
     }
+  });
 
-    document.getElementById('close-modal').addEventListener('click', closeReader);
+  /* ──────────────────────────────────────────────────────
+     PAGE NAVIGATION
+  ────────────────────────────────────────────────────── */
+  function prevPage() {
+    if (!pdfDoc || pageNum <= 1 || cropperInstance) return;
+    pageNum--;
+    queuePage(pageNum);
+  }
+  function nextPage() {
+    if (!pdfDoc || pageNum >= pdfDoc.numPages || cropperInstance) return;
+    pageNum++;
+    queuePage(pageNum);
+  }
 
-    modal.addEventListener('keydown', e => {
-      if (e.key === 'Escape')     closeReader();
-      if (e.key === 'ArrowLeft')  showPrevPage();
-      if (e.key === 'ArrowRight') showNextPage();
+  btnPrev.addEventListener('click', prevPage);
+  btnNext.addEventListener('click', nextPage);
+
+  /* ──────────────────────────────────────────────────────
+     SHLOKA SNIPPET TOOL  (Cropper.js)
+     Steps:
+       a) canvas → DataURL (JPEG)
+       b) hide canvas, show <img>, init Cropper
+       c) swap toolbar buttons
+       d) confirm → getCroppedCanvas → auto-download → restore
+  ────────────────────────────────────────────────────── */
+  btnSnippet.addEventListener('click', function () {
+    if (pageRendering || !pdfDoc) return;
+
+    /* a) grab current canvas as JPEG DataURL */
+    var dataURL = canvas.toDataURL('image/jpeg', 0.95);
+
+    /* b) hide canvas, show img */
+    canvas.style.display  = 'none';
+    cropWrap.style.display = 'block';
+    cropImg.src            = dataURL;
+
+    /* c) swap toolbars */
+    stdActions.style.display  = 'none';
+    cropActions.style.display = 'flex';
+    navGroup.style.display    = 'none';
+
+    /* init Cropper */
+    cropperInstance = new Cropper(cropImg, {
+      viewMode:     1,
+      dragMode:     'crop',
+      background:   false,
+      autoCropArea: 0.3,
+      zoomable:     false
     });
+  });
 
-    function showPrevPage() {
-      if (pageNum <= 1 || cropperInstance || !pdfDoc) return;
-      pageNum--;
-      queueRenderPage(pageNum);
-    }
-    function showNextPage() {
-      if (!pdfDoc || pageNum >= pdfDoc.numPages || cropperInstance) return;
-      pageNum++;
-      queueRenderPage(pageNum);
-    }
+  /* d) confirm: download cropped region */
+  btnConfirm.addEventListener('click', function () {
+    if (!cropperInstance) return;
 
-    document.getElementById('prev-page').addEventListener('click', showPrevPage);
-    document.getElementById('next-page').addEventListener('click', showNextPage);
+    var croppedCanvas = cropperInstance.getCroppedCanvas({ fillColor: '#fff' });
+    var link = document.createElement('a');
+    link.download = 'Shloka_Snippet.jpg';
+    link.href     = croppedCanvas.toDataURL('image/jpeg', 0.92);
+    link.click();
 
-    /* ─────────────────────────────────────────────
-       SHLOKA SNIPPET TOOL
-    ───────────────────────────────────────────── */
-    let cropperInstance = null;
-    const cropImg       = document.getElementById('crop-image');
-    const cropContainer = document.getElementById('crop-image-container');
-    const stdActions    = document.getElementById('standard-actions');
-    const cropActions   = document.getElementById('crop-actions');
-    const navControls   = document.getElementById('nav-controls');
+    cancelSnippet();
+  });
 
-    document.getElementById('start-snippet').addEventListener('click', () => {
-      if (pageIsRendering || !pdfDoc) return;
-      cropImg.src                  = canvas.toDataURL('image/jpeg', 0.95);
-      canvas.style.display         = 'none';
-      cropContainer.style.display  = 'block';
-      stdActions.style.display     = 'none';
-      cropActions.style.display    = 'flex';
-      navControls.style.display    = 'none';
-      cropperInstance = new Cropper(cropImg, {
-        viewMode: 1, dragMode: 'crop', background: false,
-        autoCropArea: 0.3, zoomable: false,
-      });
-    });
+  /* cancel: restore PDF reader UI */
+  function cancelSnippet() {
+    if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+    cropWrap.style.display    = 'none';
+    canvas.style.display      = 'block';
+    cropActions.style.display = 'none';
+    stdActions.style.display  = 'flex';
+    navGroup.style.display    = 'flex';
+  }
 
-    document.getElementById('confirm-crop').addEventListener('click', () => {
-      if (!cropperInstance) return;
-      const croppedCanvas = cropperInstance.getCroppedCanvas({ fillColor: '#fff' });
-      const link = document.createElement('a');
-      link.download = `Shloka_Snippet_Page_${pageNum}.jpg`;
-      link.href     = croppedCanvas.toDataURL('image/jpeg', 0.92);
-      link.click();
-      cancelSnippet();
-    });
+  btnCancel.addEventListener('click', cancelSnippet);
 
-    function cancelSnippet() {
-      if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
-      cropContainer.style.display = 'none';
-      canvas.style.display        = 'block';
-      cropActions.style.display   = 'none';
-      stdActions.style.display    = 'flex';
-      navControls.style.display   = 'flex';
-    }
-
-    document.getElementById('cancel-crop').addEventListener('click', cancelSnippet);
-  </script>
+}); /* end DOMContentLoaded */
+</script>
 </body>
 </html>
