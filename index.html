@@ -8,7 +8,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Hind:wght@400;500;600&display=swap" rel="stylesheet" crossorigin="anonymous" />
 
-  <!-- Cropper.js CSS — v1.6.2, confirmed live on cdnjs -->
+  <!-- Cropper.js CSS -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" rel="stylesheet" crossorigin="anonymous" />
 
   <style>
@@ -43,7 +43,6 @@
       min-height: 100vh;
     }
 
-    /* Parchment grain overlay */
     body::before {
       content: '';
       position: fixed;
@@ -66,7 +65,6 @@
       box-shadow: 0 6px 24px rgba(74,16,16,.35);
       z-index: 1;
     }
-    /* decorative corner frames */
     header::before, header::after {
       content: '';
       position: absolute;
@@ -75,9 +73,7 @@
     }
     header::before { top: 12px;    left: 12px;  border-right: none; border-bottom: none; }
     header::after  { bottom: 12px; right: 12px; border-left:  none; border-top:   none; }
-
     .header-inner { position: relative; z-index: 1; }
-
     .header-om {
       font-family: var(--font-display);
       font-size: 1.2rem;
@@ -182,8 +178,8 @@
       cursor: pointer;
       transition: background .2s, color .2s, transform .14s, box-shadow .2s;
     }
-    .filter-btn:hover   { background: rgba(106,27,26,.08); transform: translateY(-1px); }
-    .filter-btn.active  { background: var(--maroon); color: var(--white); box-shadow: 0 4px 14px rgba(106,27,26,.32); }
+    .filter-btn:hover  { background: rgba(106,27,26,.08); transform: translateY(-1px); }
+    .filter-btn.active { background: var(--maroon); color: var(--white); box-shadow: 0 4px 14px rgba(106,27,26,.32); }
 
     /* ═══════════════════════════════
        RESULTS LABEL
@@ -206,7 +202,6 @@
       grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
       gap: 20px;
     }
-
     .book-card {
       position: relative;
       overflow: hidden;
@@ -220,7 +215,6 @@
       transition: transform .2s ease, box-shadow .2s ease;
       animation: fadeUp .38s ease both;
     }
-    /* card parchment grain */
     .book-card::before {
       content: '';
       position: absolute;
@@ -230,12 +224,10 @@
       border-radius: inherit;
     }
     .book-card:hover { transform: translateY(-5px); box-shadow: 0 11px 28px rgba(74,16,16,.2); }
-
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     .cat-badge {
       position: relative; z-index: 1;
       display: inline-block;
@@ -248,7 +240,6 @@
       border-radius: 50px;
       margin-bottom: 9px;
     }
-
     .book-title {
       position: relative; z-index: 1;
       font-family: var(--font-body);
@@ -257,14 +248,12 @@
       margin-bottom: 10px;
       line-height: 1.3;
     }
-
     .book-rule {
       height: 1px;
       background: linear-gradient(90deg, var(--maroon-light), transparent);
       opacity: .3;
       margin-bottom: 10px;
     }
-
     .book-meta {
       position: relative; z-index: 1;
       font-family: var(--font-ui);
@@ -274,14 +263,12 @@
       display: flex; gap: 6px;
     }
     .book-meta strong { color: var(--maroon); font-weight: 600; min-width: 74px; flex-shrink: 0; }
-
     .card-actions {
       position: relative; z-index: 1;
       margin-top: auto;
       padding-top: 14px;
       display: flex; gap: 9px;
     }
-
     .btn {
       flex: 1;
       display: inline-flex; align-items: center; justify-content: center; gap: 5px;
@@ -295,10 +282,8 @@
     .btn:hover  { opacity: .88; transform: translateY(-1px); }
     .btn:active { transform: scale(.97); }
     .btn:disabled { opacity: .38; cursor: not-allowed; transform: none; }
-
     .btn-read     { background: var(--maroon); color: var(--white); box-shadow: 0 3px 10px rgba(106,27,26,.28); }
-    .btn-download { background: var(--bg-page, #FDEECA); color: var(--maroon); border: 1.5px solid var(--maroon); }
-
+    .btn-download { background: #FDEECA; color: var(--maroon); border: 1.5px solid var(--maroon); }
     .empty-state {
       grid-column: 1 / -1;
       text-align: center;
@@ -310,11 +295,11 @@
       font-size: 1.05rem;
     }
 
-    /* ═══════════════════════════════
+    /* ═══════════════════════════════════════════════
        READER MODAL
-    ═══════════════════════════════ */
+    ═══════════════════════════════════════════════ */
     #reader-modal {
-      display: none;         /* shown via JS: style.display = 'flex' */
+      display: none;
       position: fixed;
       inset: 0;
       background: #111;
@@ -322,7 +307,7 @@
       flex-direction: column;
     }
 
-    /* ── toolbar ── */
+    /* ── Toolbar ── */
     .reader-toolbar {
       background: #1A0808;
       border-bottom: 1px solid rgba(195,157,92,.22);
@@ -333,8 +318,8 @@
       gap: 8px;
       justify-content: space-between;
       flex-shrink: 0;
+      z-index: 10;
     }
-
     .toolbar-title {
       font-family: var(--font-body);
       font-size: .92rem; font-style: italic;
@@ -342,11 +327,9 @@
       flex: 1; min-width: 100px;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
-
     .toolbar-group {
       display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
     }
-
     .toolbar-group button {
       font-family: var(--font-ui);
       font-size: .8rem; font-weight: 600;
@@ -358,8 +341,8 @@
       transition: background .16s;
       white-space: nowrap;
     }
-    .toolbar-group button:hover { background: #3A1818; }
-
+    .toolbar-group button:hover    { background: #3A1818; }
+    .toolbar-group button:disabled { opacity: .35; cursor: not-allowed; }
     .page-info {
       font-family: var(--font-ui);
       font-size: .8rem;
@@ -367,28 +350,24 @@
       padding: 0 3px;
       white-space: nowrap;
     }
-
-    /* toolbar button variants */
     #btn-snippet      { background: rgba(195,157,92,.13) !important; color: var(--card-tan) !important; border-color: rgba(195,157,92,.45) !important; }
-    #btn-close        { background: rgba(139,30,30,.32)  !important; color: #F5A0A0       !important; border-color: rgba(139,30,30,.5)   !important; }
-    #btn-confirm-crop { background: rgba(34,120,60,.28)  !important; color: #7EE8A2       !important; border-color: rgba(34,120,60,.5)   !important; }
-    #btn-cancel-crop  { background: rgba(139,30,30,.28)  !important; color: #F5A0A0       !important; border-color: rgba(139,30,30,.45)  !important; }
-
-    /* crop actions hidden by default */
+    #btn-close        { background: rgba(139,30,30,.32)  !important; color: #F5A0A0        !important; border-color: rgba(139,30,30,.5)   !important; }
+    #btn-confirm-crop { background: rgba(34,120,60,.28)  !important; color: #7EE8A2        !important; border-color: rgba(34,120,60,.5)   !important; }
+    #btn-cancel-crop  { background: rgba(139,30,30,.28)  !important; color: #F5A0A0        !important; border-color: rgba(139,30,30,.45)  !important; }
     #crop-actions { display: none; }
 
-    /* ── canvas area ── */
-    .canvas-area {
+    /* ── Reading area ── */
+    .reading-area {
       flex: 1;
-      overflow: auto;
       display: flex;
+      align-items: center;
       justify-content: center;
-      align-items: flex-start;
-      padding: 22px 18px;
+      overflow: hidden;
       position: relative;
+      padding: 16px;
     }
 
-    /* ── spinner ── */
+    /* ── Loading spinner ── */
     .pdf-loader {
       display: none;
       position: absolute; inset: 0;
@@ -396,8 +375,23 @@
       flex-direction: column; gap: 12px;
       color: var(--card-tan);
       font-family: var(--font-ui); font-size: .88rem;
+      z-index: 20;
+      background: #111;
     }
     .pdf-loader.on { display: flex; }
+    .pdf-loader .progress-wrap {
+      width: 220px; height: 4px;
+      background: rgba(195,157,92,.18);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .pdf-loader .progress-bar {
+      height: 100%;
+      background: var(--card-tan);
+      border-radius: 2px;
+      width: 0%;
+      transition: width .3s ease;
+    }
     .spinner {
       width: 36px; height: 36px;
       border: 3px solid rgba(195,157,92,.18);
@@ -407,7 +401,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── error panel ── */
+    /* ── Error panel ── */
     .pdf-error {
       display: none;
       position: absolute; inset: 0;
@@ -416,21 +410,53 @@
       color: var(--card-tan);
       font-family: var(--font-ui); font-size: .88rem;
       text-align: center; padding: 2rem;
+      z-index: 20;
     }
     .pdf-error.on  { display: flex; }
     .pdf-error-ico { font-size: 2.2rem; opacity: .48; }
     .pdf-error a   { color: var(--card-tan); font-weight: 600; text-decoration: underline; }
 
-    /* ── PDF canvas ── */
-    #pdf-canvas {
-      display: block;
-      max-width: 100%; height: auto;
-      box-shadow: 0 8px 38px rgba(0,0,0,.72);
-      transition: opacity .26s ease;
+    /* ── Flipbook container ── */
+    #flipbook-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
     }
 
-    /* ── cropper image ── */
-    #crop-wrap { display: none; max-width: 100%; }
+    /* StPageFlip renders a div with class .stf__parent */
+    #flipbook-wrap .stf__parent {
+      /* Let the JS-calculated size drive this */
+    }
+
+    /* Subtle book shadow underneath */
+    #flipbook-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 20px;
+      background: radial-gradient(ellipse, rgba(0,0,0,.5) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Snippet (cropper) overlay ── */
+    #snippet-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: #111;
+      align-items: center;
+      justify-content: center;
+      z-index: 15;
+      padding: 12px;
+    }
+    #snippet-overlay.on { display: flex; }
+    #crop-wrap { max-width: 100%; max-height: 100%; }
     #crop-img  { max-width: 100%; display: block; }
 
     /* ═══════════════════════════════
@@ -461,7 +487,7 @@
 </head>
 <body>
 
-<!-- ══════════════ HEADER ══════════════ -->
+<!-- ══════════ HEADER ══════════ -->
 <header>
   <div class="header-inner">
     <div class="header-om">✦ ॐ ✦</div>
@@ -471,16 +497,13 @@
   </div>
 </header>
 
-<!-- ══════════════ MAIN ══════════════ -->
+<!-- ══════════ MAIN ══════════ -->
 <div class="container">
-
-  <!-- Search -->
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input type="search" id="search-input" placeholder="Search by title or author…" aria-label="Search books" />
   </div>
 
-  <!-- Filters -->
   <div class="filters" id="filter-bar" role="group" aria-label="Filter by category">
     <button class="filter-btn active" data-filter="All">All</button>
     <button class="filter-btn" data-filter="Ayurveda">Ayurveda</button>
@@ -489,50 +512,45 @@
     <button class="filter-btn" data-filter="Kavya">Kavya</button>
   </div>
 
-  <!-- Results label -->
   <div class="results-label" id="results-label" aria-live="polite"></div>
-
-  <!-- Grid -->
   <div class="book-grid" id="book-grid" role="list"></div>
-
 </div>
 
-<!-- ══════════════ FOOTER ══════════════ -->
+<!-- ══════════ FOOTER ══════════ -->
 <footer>
   <strong>Team Trayee – E-Library</strong> &nbsp;|&nbsp; Dedicated to the promotion of Sanskrit knowledge
 </footer>
 
-<!-- ══════════════ READER MODAL ══════════════ -->
+<!-- ══════════ READER MODAL ══════════ -->
 <div id="reader-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
 
   <div class="reader-toolbar">
     <div class="toolbar-title" id="modal-title">–</div>
 
-    <!-- Nav controls -->
     <div class="toolbar-group" id="nav-group">
       <button id="btn-prev" aria-label="Previous page">⬅ Prev</button>
       <span class="page-info" id="page-info">– / –</span>
       <button id="btn-next" aria-label="Next page">Next ➡</button>
     </div>
 
-    <!-- Standard actions -->
     <div class="toolbar-group" id="std-actions">
       <button id="btn-snippet" aria-label="Take snippet">✂️ Take Snippet</button>
       <button id="btn-close"   aria-label="Close reader">✖ Close</button>
     </div>
 
-    <!-- Crop actions (hidden until snippet mode) -->
     <div class="toolbar-group" id="crop-actions">
       <button id="btn-confirm-crop" aria-label="Download snippet">✅ Download Snippet</button>
       <button id="btn-cancel-crop"  aria-label="Cancel snippet">❌ Cancel</button>
     </div>
   </div>
 
-  <div class="canvas-area">
-    <!-- Spinner -->
+  <div class="reading-area" id="reading-area">
+
+    <!-- Spinner with progress -->
     <div class="pdf-loader" id="pdf-loader">
       <div class="spinner"></div>
-      <span>Loading manuscript…</span>
+      <span id="loader-text">Loading manuscript…</span>
+      <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
     </div>
 
     <!-- Error panel -->
@@ -542,56 +560,55 @@
       <p><a id="pdf-error-dl" href="#">Download the file instead ⬇</a></p>
     </div>
 
-    <!-- PDF canvas -->
-    <canvas id="pdf-canvas"></canvas>
+    <!-- Flipbook lives here — StPageFlip appends its DOM inside -->
+    <div id="flipbook-wrap">
+      <div id="flipbook"></div>
+    </div>
 
-    <!-- Cropper target -->
-    <div id="crop-wrap"><img id="crop-img" src="" alt="Page for cropping" /></div>
-  </div>
+    <!-- Snippet / Cropper overlay -->
+    <div id="snippet-overlay">
+      <div id="crop-wrap">
+        <img id="crop-img" src="" alt="Page for cropping" />
+      </div>
+    </div>
 
+  </div><!-- /.reading-area -->
 </div><!-- /#reader-modal -->
 
 
-<!-- ══════════════════════════════════════════════════
-     EXTERNAL SCRIPTS
-     crossorigin="anonymous" → browser reports real
-     error messages instead of a generic "Script error"
-══════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════
+     EXTERNAL SCRIPTS  (crossorigin="anonymous"
+     lets browser report real errors instead of
+     the generic "Script error")
+══════════════════════════════════════════ -->
 
-<!-- PDF.js v3.11.174 — main + worker must match exactly -->
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
-  crossorigin="anonymous"
-></script>
+<!-- PDF.js v3.11.174  — main + worker versions must match exactly -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+        crossorigin="anonymous"></script>
+
+<!-- StPageFlip v2.0.7 — realistic 3-D page-flip, works with canvas pages -->
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"
+        crossorigin="anonymous"></script>
 
 <!-- Cropper.js v1.6.2 -->
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"
-  crossorigin="anonymous"
-></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"
+        crossorigin="anonymous"></script>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
-   Wait for DOM to be fully parsed before touching any element
-═══════════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* ──────────────────────────────────────────────────────
-     PDF.js worker
-     Full absolute URL prevents "Invalid URL" warnings that
-     occur when PDF.js v2 tried to resolve a relative path
-     on a file:// or GitHub Pages origin.
-  ────────────────────────────────────────────────────── */
+  /* ══════════════════════════════════════════════════════
+     PDF.js worker — full absolute URL prevents
+     "Invalid URL" errors on file:// and GitHub Pages
+  ══════════════════════════════════════════════════════ */
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  /* ──────────────────────────────────────────────────────
+  /* ══════════════════════════════════════════════════════
      BOOK DATA
-     readLink    : relative path inside the repo   (./books/)
-     downloadLink: Google Drive direct-download URL
-     Note: ./books/ is more explicit than books/ and resolves
-     correctly on GitHub Pages regardless of the base URL.
-  ────────────────────────────────────────────────────── */
+     readLink    : ./books/ relative path (resolves on GitHub Pages)
+     downloadLink: direct Google Drive download (no target="_blank")
+  ══════════════════════════════════════════════════════ */
   var books = [
     {
       title:        'Ashtanga Hridayam',
@@ -645,89 +662,114 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   ];
 
-  /* ──────────────────────────────────────────────────────
-     DOM REFERENCES
-  ────────────────────────────────────────────────────── */
-  var grid         = document.getElementById('book-grid');
-  var resultsLabel = document.getElementById('results-label');
-  var searchInput  = document.getElementById('search-input');
-  var filterBar    = document.getElementById('filter-bar');
+  /* ══════════════════════════════════════════════════════
+     DOM REFS
+  ══════════════════════════════════════════════════════ */
+  var grid          = document.getElementById('book-grid');
+  var resultsLabel  = document.getElementById('results-label');
+  var searchInput   = document.getElementById('search-input');
+  var filterBar     = document.getElementById('filter-bar');
 
-  var modal        = document.getElementById('reader-modal');
-  var modalTitle   = document.getElementById('modal-title');
-  var pageInfo     = document.getElementById('page-info');
+  var modal         = document.getElementById('reader-modal');
+  var modalTitle    = document.getElementById('modal-title');
+  var pageInfoEl    = document.getElementById('page-info');
 
-  var btnPrev      = document.getElementById('btn-prev');
-  var btnNext      = document.getElementById('btn-next');
-  var btnSnippet   = document.getElementById('btn-snippet');
-  var btnClose     = document.getElementById('btn-close');
-  var btnConfirm   = document.getElementById('btn-confirm-crop');
-  var btnCancel    = document.getElementById('btn-cancel-crop');
+  var btnPrev       = document.getElementById('btn-prev');
+  var btnNext       = document.getElementById('btn-next');
+  var btnSnippet    = document.getElementById('btn-snippet');
+  var btnClose      = document.getElementById('btn-close');
+  var btnConfirm    = document.getElementById('btn-confirm-crop');
+  var btnCancel     = document.getElementById('btn-cancel-crop');
 
-  var navGroup     = document.getElementById('nav-group');
-  var stdActions   = document.getElementById('std-actions');
-  var cropActions  = document.getElementById('crop-actions');
+  var navGroup      = document.getElementById('nav-group');
+  var stdActions    = document.getElementById('std-actions');
+  var cropActions   = document.getElementById('crop-actions');
 
-  var pdfLoader    = document.getElementById('pdf-loader');
-  var pdfError     = document.getElementById('pdf-error');
-  var pdfErrorMsg  = document.getElementById('pdf-error-msg');
-  var pdfErrorDl   = document.getElementById('pdf-error-dl');
+  var pdfLoader     = document.getElementById('pdf-loader');
+  var loaderText    = document.getElementById('loader-text');
+  var progressBar   = document.getElementById('progress-bar');
+  var pdfError      = document.getElementById('pdf-error');
+  var pdfErrorMsg   = document.getElementById('pdf-error-msg');
+  var pdfErrorDl    = document.getElementById('pdf-error-dl');
 
-  var canvas       = document.getElementById('pdf-canvas');
-  var ctx          = canvas.getContext('2d');
-  var cropWrap     = document.getElementById('crop-wrap');
-  var cropImg      = document.getElementById('crop-img');
+  var flipbookEl    = document.getElementById('flipbook');
+  var readingArea   = document.getElementById('reading-area');
+  var snippetOverlay= document.getElementById('snippet-overlay');
+  var cropImg       = document.getElementById('crop-img');
 
-  /* ──────────────────────────────────────────────────────
+  /* ══════════════════════════════════════════════════════
      STATE
-  ────────────────────────────────────────────────────── */
+  ══════════════════════════════════════════════════════ */
   var currentFilter   = 'All';
   var currentSearch   = '';
   var currentDlLink   = '';
 
-  var pdfDoc          = null;
-  var pageNum         = 1;
-  var pageRendering   = false;
-  var pendingPage     = null;
+  var pdfDoc          = null;      // PDFDocumentProxy
+  var pageFlip        = null;      // StPageFlip instance
+  var totalPages      = 0;
+  var renderedCanvases= [];        // offscreen canvases, one per page
   var cropperInstance = null;
+  var snippetPageIdx  = 0;         // 0-based index of the page being snipped
 
-  /* ──────────────────────────────────────────────────────
+  /* ══════════════════════════════════════════════════════
      HELPERS
-  ────────────────────────────────────────────────────── */
+  ══════════════════════════════════════════════════════ */
   function safe(str) {
-    /* XSS-safe: use a text node instead of innerHTML for user data */
     var d = document.createElement('div');
     d.appendChild(document.createTextNode(str || ''));
     return d.innerHTML;
   }
 
-  function loaderOn()  { pdfLoader.classList.add('on'); canvas.style.display = 'none'; }
-  function loaderOff() { pdfLoader.classList.remove('on'); canvas.style.display = 'block'; }
+  function loaderOn(msg) {
+    pdfLoader.classList.add('on');
+    loaderText.textContent = msg || 'Loading manuscript…';
+    progressBar.style.width = '0%';
+  }
+  function loaderOff() {
+    pdfLoader.classList.remove('on');
+  }
+  function setProgress(pct) {
+    progressBar.style.width = Math.min(100, Math.round(pct)) + '%';
+  }
 
   function errorOn(msg, dlLink) {
     pdfError.classList.add('on');
     pdfErrorMsg.textContent = msg || 'Could not load the PDF.';
     pdfErrorDl.href = dlLink || '#';
-    pdfLoader.classList.remove('on');
-    canvas.style.display = 'none';
+    loaderOff();
   }
   function errorOff() { pdfError.classList.remove('on'); }
 
-  /* ──────────────────────────────────────────────────────
-     RENDER BOOKS
-  ────────────────────────────────────────────────────── */
+  function updatePageInfo() {
+    if (!pageFlip || !totalPages) { pageInfoEl.textContent = '– / –'; return; }
+    // StPageFlip getCurrentPageIndex() returns 0-based left-page index
+    var idx = pageFlip.getCurrentPageIndex();
+    // On desktop (double-page) the spread shows idx and idx+1
+    var isMobile = window.innerWidth <= 600;
+    if (isMobile) {
+      pageInfoEl.textContent = (idx + 1) + ' / ' + totalPages;
+    } else {
+      var right = Math.min(idx + 2, totalPages);
+      pageInfoEl.textContent = (idx + 1) + '–' + right + ' / ' + totalPages;
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     RENDER BOOK CARDS
+  ══════════════════════════════════════════════════════ */
   function renderBooks() {
     var q = currentSearch.trim().toLowerCase();
     var list = books.filter(function (b) {
       var catOk   = currentFilter === 'All' || b.category === currentFilter;
-      var queryOk = !q || b.title.toLowerCase().indexOf(q) !== -1 ||
-                        b.author.toLowerCase().indexOf(q) !== -1;
+      var queryOk = !q ||
+        b.title.toLowerCase().indexOf(q)  !== -1 ||
+        b.author.toLowerCase().indexOf(q) !== -1;
       return catOk && queryOk;
     });
 
     grid.innerHTML = '';
 
-    if (list.length === 0) {
+    if (!list.length) {
       grid.innerHTML = '<div class="empty-state">No manuscripts found.</div>';
       resultsLabel.textContent = '';
       return;
@@ -745,9 +787,7 @@ document.addEventListener('DOMContentLoaded', function () {
       card.setAttribute('role', 'listitem');
       card.style.animationDelay = (i * 0.05) + 's';
 
-      /* build download button:
-         FIX 1: no target="_blank"
-         FIX 2: download="${title} - Team trayee.pdf"  */
+      // Download button: no target="_blank", uses download attribute with exact filename format
       var dlBtn = hasDl
         ? '<a href="' + safe(book.downloadLink) + '"'
           + ' class="btn btn-download"'
@@ -782,15 +822,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   renderBooks();
 
-  /* ──────────────────────────────────────────────────────
-     FILTER & SEARCH
-  ────────────────────────────────────────────────────── */
   filterBar.addEventListener('click', function (e) {
     var btn = e.target.closest('.filter-btn');
     if (!btn) return;
-    document.querySelectorAll('.filter-btn').forEach(function (b) {
-      b.classList.remove('active');
-    });
+    document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
     renderBooks();
@@ -801,189 +836,337 @@ document.addEventListener('DOMContentLoaded', function () {
     renderBooks();
   });
 
-  /* ──────────────────────────────────────────────────────
-     OPEN READER  (event delegation — no global needed)
-  ────────────────────────────────────────────────────── */
   grid.addEventListener('click', function (e) {
     var btn = e.target.closest('.btn-read');
     if (!btn || btn.disabled) return;
     openReader(btn.dataset.read, btn.dataset.title, btn.dataset.download);
   });
 
-  /* ──────────────────────────────────────────────────────
-     PDF RENDERING
-  ────────────────────────────────────────────────────── */
-  function renderPage(num) {
-    pageRendering      = true;
-    canvas.style.opacity = '0';
+  /* ══════════════════════════════════════════════════════
+     FLIPBOOK DIMENSIONS
+     — computes the ideal page width/height for the
+       available reading area, preserving standard A4 ratio
+  ══════════════════════════════════════════════════════ */
+  function calcFlipDimensions() {
+    var areaW = readingArea.clientWidth  - 32;  // 16px padding each side
+    var areaH = readingArea.clientHeight - 32;
+    var isMobile = window.innerWidth <= 600;
 
-    pdfDoc.getPage(num).then(function (page) {
-      /* Scale to fit the viewport width */
-      var scale    = Math.min(1.6, (window.innerWidth - 48) / page.getViewport({ scale: 1 }).width);
-      var viewport = page.getViewport({ scale: scale });
+    // A4 ratio ≈ 1 : 1.414
+    var ratio = 1.414;
 
-      canvas.width  = viewport.width;
-      canvas.height = viewport.height;
+    var pageH, pageW;
 
-      page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function () {
-        pageRendering        = false;
-        canvas.style.opacity = '1';
-        pageInfo.textContent = num + ' / ' + pdfDoc.numPages;
+    if (isMobile) {
+      // Single page: fit width or height, whichever is tighter
+      pageW = Math.min(areaW, areaH / ratio);
+      pageH = Math.round(pageW * ratio);
+      pageW = Math.round(pageW);
+    } else {
+      // Double page spread: two pages side by side
+      pageW = Math.min(Math.floor(areaW / 2), Math.floor(areaH / ratio));
+      pageH = Math.round(pageW * ratio);
+    }
 
-        if (pendingPage !== null) {
-          renderPage(pendingPage);
-          pendingPage = null;
-        }
+    return { pageW: Math.max(pageW, 200), pageH: Math.max(pageH, 280), isMobile: isMobile };
+  }
+
+  /* ══════════════════════════════════════════════════════
+     PRE-RENDER ALL PDF PAGES INTO OFFSCREEN CANVASES
+     This is the key technique: we render each PDF page
+     into a hidden <canvas> at the exact flipbook page size,
+     then StPageFlip draws from those canvases.
+  ══════════════════════════════════════════════════════ */
+  function prerenderAllPages(doc, pageW, pageH, onDone) {
+    renderedCanvases = [];
+    var n = doc.numPages;
+    var done = 0;
+
+    function renderOne(pageNum) {
+      doc.getPage(pageNum).then(function (page) {
+        var naturalVP  = page.getViewport({ scale: 1 });
+        var scale      = Math.min(pageW / naturalVP.width, pageH / naturalVP.height);
+        var viewport   = page.getViewport({ scale: scale });
+
+        var c = document.createElement('canvas');
+        c.width  = pageW;
+        c.height = pageH;
+        var ctx = c.getContext('2d');
+
+        // White background (PDF pages are transparent by default)
+        ctx.fillStyle = '#f9f3e8';   // warm parchment background
+        ctx.fillRect(0, 0, pageW, pageH);
+
+        // Centre the rendered page inside the canvas
+        var offsetX = Math.round((pageW  - viewport.width)  / 2);
+        var offsetY = Math.round((pageH  - viewport.height) / 2);
+
+        page.render({
+          canvasContext: ctx,
+          viewport:      viewport,
+          transform:     [1, 0, 0, 1, offsetX, offsetY]
+        }).promise.then(function () {
+          renderedCanvases[pageNum - 1] = c;
+          done++;
+          setProgress((done / n) * 100);
+          if (done === n) { onDone(); }
+        }).catch(function (err) {
+          // On render error, store a blank canvas so the flipbook doesn't stall
+          renderedCanvases[pageNum - 1] = c;
+          done++;
+          if (done === n) { onDone(); }
+          console.error('[TT] page render error p' + pageNum + ':', err);
+        });
       }).catch(function (err) {
-        pageRendering = false;
-        console.error('[TT] page.render error:', err);
-        errorOn('Page render failed: ' + err.message, currentDlLink);
+        // getPage failed — insert a blank placeholder
+        var c = document.createElement('canvas');
+        c.width = pageW; c.height = pageH;
+        var ctx = c.getContext('2d');
+        ctx.fillStyle = '#f9f3e8';
+        ctx.fillRect(0, 0, pageW, pageH);
+        renderedCanvases[pageNum - 1] = c;
+        done++;
+        if (done === n) { onDone(); }
+        console.error('[TT] getPage error p' + pageNum + ':', err);
       });
-    }).catch(function (err) {
-      pageRendering = false;
-      console.error('[TT] getPage error:', err);
-      errorOn('Could not get page ' + num + ': ' + err.message, currentDlLink);
+    }
+
+    for (var i = 1; i <= n; i++) { renderOne(i); }
+  }
+
+  /* ══════════════════════════════════════════════════════
+     INIT STPAGEFLIP FLIPBOOK
+  ══════════════════════════════════════════════════════ */
+  function initFlipbook(pageW, pageH, isMobile) {
+    // Destroy any previous instance and clear the container
+    if (pageFlip) {
+      try { pageFlip.destroy(); } catch(e) {}
+      pageFlip = null;
+    }
+    flipbookEl.innerHTML = '';
+
+    // StPageFlip is exposed as window.St.PageFlip
+    pageFlip = new St.PageFlip(flipbookEl, {
+      width:           pageW,
+      height:          pageH,
+      size:            'fixed',
+      minWidth:        pageW,
+      maxWidth:        pageW,
+      minHeight:       pageH,
+      maxHeight:       pageH,
+      showCover:       true,      // first & last pages treated as covers
+      mobileScrollSupport: false,
+      drawShadow:      true,
+      flippingTime:    700,       // ms for flip animation
+      usePortrait:     isMobile,  // single-page on mobile
+      startPage:       0,
+      autoSize:        false,
+      clickEventForward: true
     });
+
+    // Build page items from our pre-rendered canvases
+    var items = renderedCanvases.map(function (c) {
+      return c;
+    });
+
+    pageFlip.loadFromImages(
+      renderedCanvases.map(function (c) { return c.toDataURL('image/jpeg', 0.92); })
+    );
+
+    // Wire up page-change event → update toolbar counter
+    pageFlip.on('flip', function () {
+      updatePageInfo();
+    });
+    pageFlip.on('changeState', function () {
+      updatePageInfo();
+    });
+
+    updatePageInfo();
   }
 
-  function queuePage(num) {
-    if (pageRendering) { pendingPage = num; }
-    else               { renderPage(num); }
-  }
-
-  /* ──────────────────────────────────────────────────────
-     OPEN / CLOSE MODAL
-  ────────────────────────────────────────────────────── */
+  /* ══════════════════════════════════════════════════════
+     OPEN READER
+  ══════════════════════════════════════════════════════ */
   function openReader(url, title, dlLink) {
-    /* reset all state */
-    pdfDoc = null;
-    pageNum = 1;
-    currentDlLink = dlLink || '';
-    pendingPage   = null;
-    pageRendering = false;
+    // Reset state
+    pdfDoc         = null;
+    renderedCanvases = [];
+    currentDlLink  = dlLink || '';
+    totalPages     = 0;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    modalTitle.textContent  = title || '–';
-    pageInfo.textContent    = '– / –';
+    modalTitle.textContent = title || '–';
+    pageInfoEl.textContent = '– / –';
     errorOff();
-    loaderOn();
+    loaderOn('Loading manuscript…');
 
     modal.style.display          = 'flex';
     document.body.style.overflow = 'hidden';
     modal.focus();
 
-    /* ── robust PDF loading with try/catch + .catch ── */
+    // Ensure snippet overlay is hidden
+    snippetOverlay.classList.remove('on');
+    stdActions.style.display  = 'flex';
+    cropActions.style.display = 'none';
+    navGroup.style.display    = 'flex';
+
     try {
       var loadingTask = pdfjsLib.getDocument(url);
 
+      // Track loading progress
+      loadingTask.onProgress = function (data) {
+        if (data.total) {
+          setProgress((data.loaded / data.total) * 50); // first 50% = download
+        }
+      };
+
       loadingTask.promise
         .then(function (doc) {
-          pdfDoc = doc;
-          loaderOff();
-          renderPage(pageNum);
+          pdfDoc     = doc;
+          totalPages = doc.numPages;
+
+          loaderText.textContent = 'Rendering pages (' + totalPages + ')…';
+          setProgress(50);
+
+          var dims = calcFlipDimensions();
+
+          prerenderAllPages(doc, dims.pageW, dims.pageH, function () {
+            loaderText.textContent = 'Building flipbook…';
+            setProgress(98);
+
+            // Small delay so the browser can paint the progress bar
+            setTimeout(function () {
+              initFlipbook(dims.pageW, dims.pageH, dims.isMobile);
+              loaderOff();
+              updatePageInfo();
+            }, 80);
+          });
         })
         .catch(function (err) {
-          /* Catches 404s, malformed PDF, CORS blocks, etc. */
           console.error('[TT] getDocument failed:', err);
-
-          var msg = 'Could not load the PDF.';
-          if (err && err.message) {
-            /* Surface specific errors to help with debugging */
-            if (err.message.indexOf('404') !== -1 || err.status === 404) {
-              msg = 'File not found (404). '
-                  + 'Make sure "' + url + '" exists in your GitHub repo '
-                  + 'and that GitHub Pages has finished deploying.';
-            } else if (err.message.toLowerCase().indexOf('cors') !== -1) {
-              msg = 'CORS error: the server blocked the PDF request. '
-                  + 'Try downloading the file instead.';
-            } else {
-              msg = 'PDF load error: ' + err.message;
-            }
-          }
+          var msg = buildErrorMsg(err, url);
           errorOn(msg, currentDlLink);
-          alert('⚠️ ' + msg);   /* user-friendly alert as requested */
+          alert('⚠️ ' + msg);
         });
 
     } catch (syncErr) {
-      /* Catches any synchronous throw from pdfjsLib.getDocument() itself */
       console.error('[TT] getDocument threw synchronously:', syncErr);
-      var syncMsg = 'PDF reader error: ' + (syncErr.message || syncErr);
+      var syncMsg = 'PDF reader error: ' + (syncErr.message || String(syncErr));
       errorOn(syncMsg, currentDlLink);
       alert('⚠️ ' + syncMsg);
     }
   }
 
+  function buildErrorMsg(err, url) {
+    if (!err) return 'Could not load the PDF.';
+    var m = err.message || '';
+    if (m.indexOf('404') !== -1 || err.status === 404) {
+      return 'File not found (404). Make sure "' + url + '" exists in your repo '
+           + 'and GitHub Pages has finished deploying.';
+    }
+    if (m.toLowerCase().indexOf('cors') !== -1) {
+      return 'CORS error — the server blocked the request. Try downloading instead.';
+    }
+    return 'PDF load error: ' + m;
+  }
+
+  /* ══════════════════════════════════════════════════════
+     CLOSE READER
+  ══════════════════════════════════════════════════════ */
   function closeReader() {
+    if (cropperInstance) cancelSnippet();
     modal.style.display          = 'none';
     document.body.style.overflow = 'auto';
-    if (cropperInstance) cancelSnippet();
     errorOff();
     loaderOff();
+    snippetOverlay.classList.remove('on');
+    // Destroy flipbook to free memory
+    if (pageFlip) {
+      try { pageFlip.destroy(); } catch(e) {}
+      pageFlip = null;
+    }
+    renderedCanvases = [];
+    pdfDoc = null;
   }
 
   btnClose.addEventListener('click', closeReader);
 
-  /* Keyboard shortcuts inside modal */
   modal.addEventListener('keydown', function (e) {
     switch (e.key) {
-      case 'Escape':     closeReader();          break;
-      case 'ArrowLeft':  prevPage();             break;
-      case 'ArrowRight': nextPage();             break;
+      case 'Escape':     closeReader();  break;
+      case 'ArrowLeft':  flipPrev();     break;
+      case 'ArrowRight': flipNext();     break;
     }
   });
 
-  /* ──────────────────────────────────────────────────────
-     PAGE NAVIGATION
-  ────────────────────────────────────────────────────── */
-  function prevPage() {
-    if (!pdfDoc || pageNum <= 1 || cropperInstance) return;
-    pageNum--;
-    queuePage(pageNum);
+  /* ══════════════════════════════════════════════════════
+     PREV / NEXT (toolbar buttons)
+  ══════════════════════════════════════════════════════ */
+  function flipPrev() {
+    if (!pageFlip || cropperInstance) return;
+    pageFlip.flipPrev();
   }
-  function nextPage() {
-    if (!pdfDoc || pageNum >= pdfDoc.numPages || cropperInstance) return;
-    pageNum++;
-    queuePage(pageNum);
+  function flipNext() {
+    if (!pageFlip || cropperInstance) return;
+    pageFlip.flipNext();
   }
 
-  btnPrev.addEventListener('click', prevPage);
-  btnNext.addEventListener('click', nextPage);
+  btnPrev.addEventListener('click', flipPrev);
+  btnNext.addEventListener('click', flipNext);
 
-  /* ──────────────────────────────────────────────────────
-     SHLOKA SNIPPET TOOL  (Cropper.js)
-     Steps:
-       a) canvas → DataURL (JPEG)
-       b) hide canvas, show <img>, init Cropper
-       c) swap toolbar buttons
-       d) confirm → getCroppedCanvas → auto-download → restore
-  ────────────────────────────────────────────────────── */
+  /* ══════════════════════════════════════════════════════
+     SHLOKA SNIPPET TOOL
+     ─────────────────────────────────────────────────────
+     Strategy:
+       a) Get the 0-based index of the currently visible
+          LEFT page from StPageFlip.
+       b) Retrieve the pre-rendered offscreen canvas for
+          that page index (renderedCanvases[idx]).
+       c) Convert that canvas to a JPEG DataURL.
+       d) Hide the flipbook area, show the snippet overlay
+          with an <img> holding that DataURL.
+       e) Initialise Cropper.js on the <img>.
+       f) On confirm: getCroppedCanvas → download → restore.
+  ══════════════════════════════════════════════════════ */
   btnSnippet.addEventListener('click', function () {
-    if (pageRendering || !pdfDoc) return;
+    if (!pageFlip || !renderedCanvases.length) return;
 
-    /* a) grab current canvas as JPEG DataURL */
-    var dataURL = canvas.toDataURL('image/jpeg', 0.95);
+    // a) which page is currently on the left of the spread?
+    snippetPageIdx = pageFlip.getCurrentPageIndex();  // 0-based
+    // Clamp to valid range
+    if (snippetPageIdx >= renderedCanvases.length) {
+      snippetPageIdx = renderedCanvases.length - 1;
+    }
 
-    /* b) hide canvas, show img */
-    canvas.style.display  = 'none';
-    cropWrap.style.display = 'block';
-    cropImg.src            = dataURL;
+    // b) grab the pre-rendered canvas for this page
+    var srcCanvas = renderedCanvases[snippetPageIdx];
+    if (!srcCanvas) return;
 
-    /* c) swap toolbars */
+    // c) convert to DataURL
+    var dataURL = srcCanvas.toDataURL('image/jpeg', 0.95);
+
+    // d) show snippet overlay
+    cropImg.src = dataURL;
+    snippetOverlay.classList.add('on');
+
+    // e) swap toolbars
     stdActions.style.display  = 'none';
     cropActions.style.display = 'flex';
     navGroup.style.display    = 'none';
 
-    /* init Cropper */
-    cropperInstance = new Cropper(cropImg, {
-      viewMode:     1,
-      dragMode:     'crop',
-      background:   false,
-      autoCropArea: 0.3,
-      zoomable:     false
+    // f) init Cropper (needs a tick for the image to paint)
+    requestAnimationFrame(function () {
+      cropperInstance = new Cropper(cropImg, {
+        viewMode:     1,
+        dragMode:     'crop',
+        background:   false,
+        autoCropArea: 0.35,
+        zoomable:     false,
+        responsive:   true
+      });
     });
   });
 
-  /* d) confirm: download cropped region */
+  /* Confirm — download the crop */
   btnConfirm.addEventListener('click', function () {
     if (!cropperInstance) return;
 
@@ -996,11 +1179,10 @@ document.addEventListener('DOMContentLoaded', function () {
     cancelSnippet();
   });
 
-  /* cancel: restore PDF reader UI */
+  /* Cancel — restore flipbook */
   function cancelSnippet() {
     if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
-    cropWrap.style.display    = 'none';
-    canvas.style.display      = 'block';
+    snippetOverlay.classList.remove('on');
     cropActions.style.display = 'none';
     stdActions.style.display  = 'flex';
     navGroup.style.display    = 'flex';
@@ -1008,7 +1190,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   btnCancel.addEventListener('click', cancelSnippet);
 
-}); /* end DOMContentLoaded */
+  /* ══════════════════════════════════════════════════════
+     RESIZE HANDLER — re-build flipbook if window resizes
+     significantly (e.g. phone rotation)
+  ══════════════════════════════════════════════════════ */
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    if (!pageFlip || !pdfDoc) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      var dims       = calcFlipDimensions();
+      var currentPg  = pageFlip.getCurrentPageIndex();
+
+      // Re-render canvases at new size, then rebuild flipbook
+      loaderOn('Resizing…');
+      prerenderAllPages(pdfDoc, dims.pageW, dims.pageH, function () {
+        initFlipbook(dims.pageW, dims.pageH, dims.isMobile);
+        // Jump back to the same page spread
+        try { pageFlip.turnToPage(currentPg); } catch(e) {}
+        loaderOff();
+        updatePageInfo();
+      });
+    }, 400);
+  });
+
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
