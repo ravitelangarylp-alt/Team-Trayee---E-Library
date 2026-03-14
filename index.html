@@ -1,495 +1,1050 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Trayee - E-Library</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Trayee – E-Library</title>
 
-    <style>
-        /* --- 1. DESIGN & THEME VARIABLES --- */
-        :root {
-            --primary-maroon: #6A1B1A;
-            --bg-beige: #FDEECA;
-            --card-dark-beige: #C39D5C;
-            --text-dark: #2C1A1A;
-            --white: #FFFFFF;
-        }
+  <!-- Fonts: Tiro Devanagari Sanskrit (for brand feel) + Lora (scholarly serif) + Hind (clean body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Hind:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
 
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: var(--bg-beige);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 0;
-        }
+  <style>
+    /* ═══════════════════════════════════════════════════════
+       1. BRAND TOKENS  (from screenshot)
+    ═══════════════════════════════════════════════════════ */
+    :root {
+      --maroon:        #6A1B1A;   /* header, buttons, titles     */
+      --maroon-deep:   #4A1010;   /* hover / shadow              */
+      --maroon-light:  #8B2E2D;   /* accent strokes              */
+      --bg-page:       #FDEECA;   /* page background             */
+      --bg-parchment:  #F5D98B;   /* mid-tone parchment          */
+      --card-tan:      #C39D5C;   /* card background             */
+      --card-dark:     #A8843D;   /* card border / shadow        */
+      --text-dark:     #2C1010;   /* body text on light bg       */
+      --text-oncard:   #1E0E00;   /* text on tan cards           */
+      --white:         #FFFFFF;
 
-        h1, h2, h3, .scholarly-text {
-            font-family: 'Lora', serif;
-        }
+      --font-display:  'Tiro Devanagari Sanskrit', serif;
+      --font-body:     'Lora', serif;
+      --font-ui:       'Hind', sans-serif;
+    }
 
-        /* --- 2. HEADER & LAYOUT --- */
-        header {
-            background-color: var(--primary-maroon);
-            color: var(--white);
-            text-align: center;
-            padding: 2.5rem 1rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
+    /* ═══════════════════════════════════════════════════════
+       2. RESET & BASE
+    ═══════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            letter-spacing: 1px;
-        }
+    html { scroll-behavior: smooth; }
 
-        header p {
-            margin: 10px 0 0 0;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-page);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
+    /* Parchment texture overlay using SVG noise */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        /* --- 3. FILTER BUTTONS --- */
-        .filters {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 2rem;
-        }
+    /* ═══════════════════════════════════════════════════════
+       3. HEADER
+    ═══════════════════════════════════════════════════════ */
+    header {
+      background: var(--maroon);
+      color: var(--white);
+      text-align: center;
+      padding: 2.8rem 1.5rem 2.2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 24px rgba(74,16,16,0.35);
+    }
 
-        .filter-btn {
-            background-color: transparent;
-            border: 2px solid var(--primary-maroon);
-            color: var(--primary-maroon);
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    /* decorative corner borders */
+    header::before, header::after {
+      content: '';
+      position: absolute;
+      width: 90px; height: 90px;
+      border: 3px solid rgba(255,255,255,0.18);
+    }
+    header::before { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+    header::after  { bottom: 12px; right: 12px; border-left: none; border-top: none; }
 
-        .filter-btn:hover, .filter-btn.active {
-            background-color: var(--primary-maroon);
-            color: var(--white);
-        }
+    .header-inner { position: relative; z-index: 1; }
 
-        /* --- 4. BOOK GRID & CARDS --- */
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
+    .header-ornament {
+      font-size: 1.3rem;
+      letter-spacing: 0.4em;
+      opacity: 0.55;
+      margin-bottom: 0.5rem;
+      font-family: var(--font-display);
+    }
 
-        .book-card {
-            background-color: var(--card-dark-beige);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-            display: flex;
-            flex-direction: column;
-        }
+    header h1 {
+      font-family: var(--font-body);
+      font-size: clamp(1.7rem, 5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
 
-        .book-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-        }
+    header h1 span {
+      font-family: var(--font-display);
+      font-size: 0.7em;
+      display: block;
+      letter-spacing: 0.12em;
+      opacity: 0.85;
+      font-weight: 400;
+      margin-bottom: 0.2rem;
+    }
 
-        .book-title {
-            font-size: 1.4rem;
-            color: var(--primary-maroon);
-            margin: 0 0 10px 0;
-        }
+    header p {
+      font-family: var(--font-ui);
+      font-size: 0.95rem;
+      opacity: 0.78;
+      letter-spacing: 0.02em;
+      max-width: 560px;
+      margin: 0 auto;
+    }
 
-        .book-meta {
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
+    .header-divider {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      margin: 1rem auto 0.8rem;
+    }
 
-        .book-meta strong {
-            color: var(--primary-maroon);
-        }
+    /* ═══════════════════════════════════════════════════════
+       4. LAYOUT CONTAINER
+    ═══════════════════════════════════════════════════════ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.2rem 4rem;
+      position: relative;
+      z-index: 1;
+    }
 
-        .card-actions {
-            margin-top: auto;
-            padding-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
+    /* ═══════════════════════════════════════════════════════
+       5. SEARCH BAR
+    ═══════════════════════════════════════════════════════ */
+    .search-wrap {
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
 
-        .btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: opacity 0.2s;
-        }
+    .search-wrap input {
+      width: 100%;
+      padding: 0.75rem 1.2rem 0.75rem 3rem;
+      border: 2px solid var(--card-tan);
+      border-radius: 50px;
+      background: rgba(255,255,255,0.7);
+      font-family: var(--font-ui);
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
 
-        .btn:hover { opacity: 0.9; }
-        
-        .btn-read {
-            background-color: var(--primary-maroon);
-            color: var(--white);
-        }
+    .search-wrap input:focus {
+      border-color: var(--maroon);
+      box-shadow: 0 0 0 3px rgba(106,27,26,0.12);
+    }
 
-        .btn-download {
-            background-color: var(--bg-beige);
-            color: var(--primary-maroon);
-            border: 1px solid var(--primary-maroon);
-        }
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--card-tan);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
 
-        /* --- 5. READING MODAL (DARK MODE) --- */
-        #reader-modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(20, 20, 20, 0.98);
-            z-index: 1000;
-            flex-direction: column;
-        }
+    /* ═══════════════════════════════════════════════════════
+       6. FILTER BUTTONS
+    ═══════════════════════════════════════════════════════ */
+    .filters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 2.5rem;
+    }
 
-        .reader-toolbar {
-            background-color: #111;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
+    .filter-btn {
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      padding: 9px 22px;
+      border-radius: 50px;
+      border: 2px solid var(--maroon);
+      background: transparent;
+      color: var(--maroon);
+      cursor: pointer;
+      transition: background 0.22s, color 0.22s, transform 0.15s, box-shadow 0.22s;
+    }
 
-        .toolbar-group button {
-            background-color: #333;
-            color: white;
-            border: 1px solid #555;
-            padding: 8px 15px;
-            margin: 0 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Open Sans', sans-serif;
-        }
+    .filter-btn:hover {
+      background: rgba(106,27,26,0.08);
+      transform: translateY(-1px);
+    }
 
-        .toolbar-group button:hover { background-color: #555; }
-        
-        .btn-snippet { background-color: #C39D5C !important; color: #111 !important; font-weight: bold;}
-        .btn-close { background-color: #8B0000 !important; }
+    .filter-btn.active {
+      background: var(--maroon);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(106,27,26,0.35);
+    }
 
-        .canvas-container {
-            flex: 1;
-            overflow: auto;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px;
-            position: relative;
-        }
+    /* ═══════════════════════════════════════════════════════
+       7. RESULTS COUNT
+    ═══════════════════════════════════════════════════════ */
+    .results-count {
+      text-align: center;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      color: var(--maroon-light);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
 
-        /* 3D-like transition effect for canvas */
-        #pdf-canvas {
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
-            transition: opacity 0.3s ease-in-out;
-            max-width: 100%;
-            height: auto;
-        }
+    /* ═══════════════════════════════════════════════════════
+       8. BOOK GRID & CARDS
+    ═══════════════════════════════════════════════════════ */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 22px;
+    }
 
-        /* Cropper dynamic image holder */
-        #crop-image-container {
-            display: none;
-            max-width: 100%;
-        }
-        
-        #crop-actions {
-            display: none;
-        }
-    </style>
+    .book-card {
+      background: var(--card-tan);
+      border-radius: 14px;
+      padding: 22px 20px 18px;
+      border: 1.5px solid var(--card-dark);
+      box-shadow: 0 4px 18px rgba(74,16,16,0.14), inset 0 1px 0 rgba(255,255,255,0.18);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      animation: fadeUp 0.4s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* card inner parchment grain */
+    .book-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    .book-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(74,16,16,0.22);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Category badge */
+    .cat-badge {
+      display: inline-block;
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      background: var(--maroon);
+      color: var(--white);
+      padding: 3px 10px;
+      border-radius: 50px;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .book-title {
+      font-family: var(--font-body);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--maroon);
+      margin-bottom: 12px;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+
+    .book-divider {
+      height: 1px;
+      background: linear-gradient(90deg, var(--maroon-light), transparent);
+      opacity: 0.35;
+      margin-bottom: 12px;
+    }
+
+    .book-meta {
+      font-family: var(--font-ui);
+      font-size: 0.86rem;
+      color: var(--text-oncard);
+      margin-bottom: 5px;
+      display: flex;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .book-meta strong {
+      color: var(--maroon);
+      font-weight: 600;
+      min-width: 76px;
+      flex-shrink: 0;
+    }
+
+    .card-actions {
+      margin-top: auto;
+      padding-top: 16px;
+      display: flex;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px 8px;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: opacity 0.18s, transform 0.15s, box-shadow 0.18s;
+    }
+
+    .btn:hover  { opacity: 0.9; transform: translateY(-1px); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-read {
+      background: var(--maroon);
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(106,27,26,0.3);
+    }
+
+    .btn-download {
+      background: var(--bg-page);
+      color: var(--maroon);
+      border: 1.5px solid var(--maroon);
+    }
+
+    /* Empty state */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 1rem;
+      font-family: var(--font-body);
+      font-style: italic;
+      color: var(--maroon-light);
+      opacity: 0.7;
+      font-size: 1.1rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       9. READING MODAL
+    ═══════════════════════════════════════════════════════ */
+    #reader-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 5, 5, 0.97);
+      z-index: 1000;
+      flex-direction: column;
+    }
+
+    .reader-toolbar {
+      background: #1A0808;
+      border-bottom: 1px solid rgba(195,157,92,0.25);
+      padding: 12px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .toolbar-title {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--card-tan);
+      font-style: italic;
+      flex: 1;
+      min-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-group button {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: #2A1010;
+      color: #D4A96A;
+      border: 1px solid rgba(195,157,92,0.3);
+      padding: 7px 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.18s;
+      white-space: nowrap;
+    }
+
+    .toolbar-group button:hover { background: #3A1818; }
+
+    .page-info {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      color: rgba(195,157,92,0.7);
+      padding: 0 4px;
+      white-space: nowrap;
+    }
+
+    .btn-snippet {
+      background: rgba(195,157,92,0.15) !important;
+      color: var(--card-tan) !important;
+      border-color: rgba(195,157,92,0.5) !important;
+    }
+
+    .btn-close-modal {
+      background: rgba(139,30,30,0.35) !important;
+      color: #F5A0A0 !important;
+      border-color: rgba(139,30,30,0.5) !important;
+    }
+
+    .btn-confirm-crop {
+      background: rgba(34,120,60,0.3) !important;
+      color: #7EE8A2 !important;
+      border-color: rgba(34,120,60,0.5) !important;
+    }
+
+    .btn-cancel-crop {
+      background: rgba(139,30,30,0.3) !important;
+      color: #F5A0A0 !important;
+      border-color: rgba(139,30,30,0.4) !important;
+    }
+
+    #crop-actions { display: none; }
+
+    .canvas-container {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 20px;
+      position: relative;
+    }
+
+    /* Loading spinner */
+    .pdf-loader {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      color: var(--card-tan);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+    }
+
+    .pdf-loader.visible { display: flex; }
+
+    .spinner {
+      width: 38px; height: 38px;
+      border: 3px solid rgba(195,157,92,0.2);
+      border-top-color: var(--card-tan);
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #pdf-canvas {
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+      max-width: 100%;
+      height: auto;
+      transition: opacity 0.28s ease;
+      display: block;
+    }
+
+    #crop-image-container { display: none; max-width: 100%; }
+    #crop-image           { max-width: 100%; }
+
+    /* Error panel */
+    .reader-error {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--card-tan);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .reader-error.visible { display: flex; }
+
+    .reader-error-icon { font-size: 2.5rem; opacity: 0.5; }
+
+    .reader-error a {
+      color: var(--card-tan);
+      font-weight: 600;
+      text-decoration: underline;
+      opacity: 0.9;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       10. FOOTER
+    ═══════════════════════════════════════════════════════ */
+    footer {
+      background: var(--maroon);
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+      padding: 1.4rem 1rem;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      position: relative;
+      z-index: 1;
+    }
+
+    footer strong { color: rgba(255,255,255,0.9); }
+
+    /* ═══════════════════════════════════════════════════════
+       11. RESPONSIVE
+    ═══════════════════════════════════════════════════════ */
+    @media (max-width: 600px) {
+      .reader-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .toolbar-title  { display: none; }
+      .toolbar-group  { width: 100%; }
+      .toolbar-group button { flex: 1; font-size: 0.78rem; padding: 7px 8px; }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1>Team Trayee - E-Library</h1>
-        <p class="scholarly-text">Preserving and exploring the profound wisdom of ancient Sanskrit literature.</p>
-    </header>
+  <!-- ══════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════ -->
+  <header>
+    <div class="header-inner">
+      <div class="header-ornament">✦ ॐ ✦</div>
+      <h1>
+        <span>Team Trayee</span>
+        E-Library
+      </h1>
+      <div class="header-divider"></div>
+      <p>Preserving and exploring the profound wisdom of ancient Sanskrit literature</p>
+    </div>
+  </header>
 
-    <div class="container">
-        <div class="filters" id="filter-container">
-            <button class="filter-btn active" data-filter="All">All</button>
-            <button class="filter-btn" data-filter="Ayurveda">Ayurveda</button>
-            <button class="filter-btn" data-filter="Vyakarana">Vyakarana</button>
-            <button class="filter-btn" data-filter="Vedanta">Vedanta</button>
-            <button class="filter-btn" data-filter="Kavya">Kavya</button>
-        </div>
+  <!-- ══════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════ -->
+  <div class="container">
 
-        <div class="book-grid" id="book-grid">
-            </div>
+    <!-- Search -->
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input
+        type="search"
+        id="search-input"
+        placeholder="Search by title or author…"
+        aria-label="Search books"
+      />
     </div>
 
-    <div id="reader-modal">
-        <div class="reader-toolbar">
-            <div class="toolbar-group">
-                <button id="prev-page">⬅ Previous</button>
-                <span>Page: <span id="page-num"></span> / <span id="page-count"></span></span>
-                <button id="next-page">Next ➡</button>
-            </div>
-            
-            <div class="toolbar-group" id="standard-actions">
-                <button class="btn-snippet" id="start-snippet">✂️ Take Snippet</button>
-                <button class="btn-close" id="close-modal">✖ Close</button>
-            </div>
-
-            <div class="toolbar-group" id="crop-actions">
-                <button style="background-color: #4CAF50;" id="confirm-crop">✅ Download Snippet</button>
-                <button style="background-color: #f44336;" id="cancel-crop">❌ Cancel</button>
-            </div>
-        </div>
-
-        <div class="canvas-container" id="canvas-container">
-            <canvas id="pdf-canvas"></canvas>
-            <div id="crop-image-container">
-                <img id="crop-image" src="" alt="Page ready for cropping">
-            </div>
-        </div>
+    <!-- Category filters -->
+    <div class="filters" id="filter-container" role="group" aria-label="Filter by category">
+      <button class="filter-btn active" data-filter="All">All</button>
+      <button class="filter-btn" data-filter="Ayurveda">Ayurveda</button>
+      <button class="filter-btn" data-filter="Vyakarana">Vyakarana</button>
+      <button class="filter-btn" data-filter="Vedanta">Vedanta</button>
+      <button class="filter-btn" data-filter="Kavya">Kavya</button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <!-- Results count -->
+    <div class="results-count" id="results-count" aria-live="polite"></div>
 
-    <script>
-        /* --- 1. MOCKUP DATA --- */
-        const books = [
-            {
-                title: "Ashtanga Hridayam",
-                author: "Vagbhata",
-                category: "Ayurveda",
-                language: "Sanskrit",
-                publisher: "Chaukambha, 2024",
-                // Demo CORS-friendly PDF for the reader, but actual GDrive link for download
-                readLink: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf",
-                downloadLink: "https://drive.google.com/uc?export=download&id=1mzKYuBSjwxh12hRxrfFx0u10xGWEU109"
-            },
-            {
-                title: "Siddhanta Kaumudi",
-                author: "Bhattoji Dikshita",
-                category: "Vyakarana",
-                language: "Sanskrit",
-                publisher: "Motilal Banarsidass, 2020",
-                readLink: "#", downloadLink: "#"
-            },
-            {
-                title: "Brahma Sutra Bhashya",
-                author: "Adi Shankaracharya",
-                category: "Vedanta",
-                language: "Sanskrit",
-                publisher: "Gita Press, 2018",
-                readLink: "#", downloadLink: "#"
-            },
-            {
-                title: "Meghadutam",
-                author: "Kalidasa",
-                category: "Kavya",
-                language: "Sanskrit",
-                publisher: "Sahitya Akademi, 2015",
-                readLink: "#", downloadLink: "#"
+    <!-- Book grid -->
+    <div class="book-grid" id="book-grid" role="list"></div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer>
+    <strong>Team Trayee – E-Library</strong> &nbsp;|&nbsp; Dedicated to the promotion of Sanskrit knowledge
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       READER MODAL
+  ══════════════════════════════════════ -->
+  <div
+    id="reader-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-book-title"
+    tabindex="-1"
+  >
+    <div class="reader-toolbar">
+      <!-- Book title -->
+      <div class="toolbar-title" id="modal-book-title">–</div>
+
+      <!-- Page navigation -->
+      <div class="toolbar-group" id="nav-controls">
+        <button id="prev-page" aria-label="Previous page">⬅ Prev</button>
+        <span class="page-info">
+          <span id="page-num">–</span> / <span id="page-count">–</span>
+        </span>
+        <button id="next-page" aria-label="Next page">Next ➡</button>
+      </div>
+
+      <!-- Standard actions -->
+      <div class="toolbar-group" id="standard-actions">
+        <button class="btn-snippet" id="start-snippet" aria-label="Take a snippet of the current page">✂️ Snippet</button>
+        <button class="btn-close-modal" id="close-modal" aria-label="Close reader">✖ Close</button>
+      </div>
+
+      <!-- Crop actions (shown while cropping) -->
+      <div class="toolbar-group" id="crop-actions">
+        <button class="btn-confirm-crop" id="confirm-crop" aria-label="Download cropped snippet">✅ Download Snippet</button>
+        <button class="btn-cancel-crop"  id="cancel-crop"  aria-label="Cancel snippet">❌ Cancel</button>
+      </div>
+    </div>
+
+    <div class="canvas-container" id="canvas-container">
+      <!-- Loader -->
+      <div class="pdf-loader" id="pdf-loader">
+        <div class="spinner"></div>
+        <span>Loading manuscript…</span>
+      </div>
+
+      <!-- Error panel -->
+      <div class="reader-error" id="reader-error">
+        <div class="reader-error-icon">📜</div>
+        <p>This PDF could not be loaded in the browser reader.<br>This is usually due to cross-origin restrictions.</p>
+        <p><a id="error-download-link" href="#">Download the file instead ⬇</a></p>
+      </div>
+
+      <!-- PDF canvas -->
+      <canvas id="pdf-canvas"></canvas>
+
+      <!-- Cropper image -->
+      <div id="crop-image-container">
+        <img id="crop-image" src="" alt="Page ready for cropping" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+  <script>
+    /* ─────────────────────────────────────────────
+       1. BOOK DATA
+    ───────────────────────────────────────────── */
+   const books = [
+    {
+        title: "Ashtanga Hridayam",
+        author: "Vagbhata",
+        category: "Ayurveda",
+        language: "Sanskrit",
+        publisher: "Chaukambha, 2024",
+        // Fix: Use a relative path to the file inside your GitHub repo
+        readLink: "books/Ashtanga_Hridayam.pdf", 
+        // Keep the Google Drive link for the download button, that still works perfectly!
+        downloadLink: "https://drive.google.com/uc?export=download&id=1mzKYuBSjwxh12hRxrfFx0u10xGWEU109" 
+    },      },
+      {
+        title:       'Charaka Samhita',
+        author:      'Charaka',
+        category:    'Ayurveda',
+        language:    'Sanskrit',
+        publisher:   'Chaukambha Sanskrit Pratishthan',
+        year:        '2019',
+        readLink:    null, downloadLink: null, fileName: null,
+      },
+      {
+        title:       'Siddhanta Kaumudi',
+        author:      'Bhattoji Dikshita',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        publisher:   'Motilal Banarsidass',
+        year:        '2020',
+        readLink:    null, downloadLink: null, fileName: null,
+      },
+      {
+        title:       'Ashtadhyayi',
+        author:      'Panini',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        publisher:   'Sahitya Akademi',
+        year:        '2015',
+        readLink:    null, downloadLink: null, fileName: null,
+      },
+      {
+        title:       'Brahma Sutra Bhashya',
+        author:      'Adi Shankaracharya',
+        category:    'Vedanta',
+        language:    'Sanskrit',
+        publisher:   'Gita Press Gorakhpur',
+        year:        '2018',
+        readLink:    null, downloadLink: null, fileName: null,
+      },
+      {
+        title:       'Vivekachudamani',
+        author:      'Adi Shankaracharya',
+        category:    'Vedanta',
+        language:    'Sanskrit',
+        publisher:   'Ramakrishna Math',
+        year:        '2017',
+        readLink:    null, downloadLink: null, fileName: null,
+      },
+      {
+        title:       'Meghadutam',
+        author:      'Kalidasa',
+        category:    'Kavya',
+        language:    'Sanskrit',
+        publisher:   'Sahitya Akademi',
+        year:        '2015',
+        readLink:    null, downloadLink: null, fileName: null,
+      },
+      {
+        title:       'Raghuvamsham',
+        author:      'Kalidasa',
+        category:    'Kavya',
+        language:    'Sanskrit',
+        publisher:   'Chaukambha Vidyabhavan',
+        year:        '2021',
+        readLink:    null, downloadLink: null, fileName: null,
+      },
+    ];
+
+    /* ─────────────────────────────────────────────
+       2. RENDER BOOKS
+    ───────────────────────────────────────────── */
+    const grid        = document.getElementById('book-grid');
+    const countEl     = document.getElementById('results-count');
+    const filterBtns  = document.querySelectorAll('.filter-btn');
+    const searchInput = document.getElementById('search-input');
+
+    let currentFilter = 'All';
+    let currentSearch = '';
+
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.appendChild(document.createTextNode(str));
+      return d.innerHTML;
+    }
+
+    function renderBooks() {
+      const query = currentSearch.trim().toLowerCase();
+      const filtered = books.filter(b => {
+        const catMatch   = currentFilter === 'All' || b.category === currentFilter;
+        const queryMatch = !query ||
+          b.title.toLowerCase().includes(query) ||
+          b.author.toLowerCase().includes(query);
+        return catMatch && queryMatch;
+      });
+
+      grid.innerHTML = '';
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="empty-state">No manuscripts found matching your search.</div>';
+        countEl.textContent = '0 books';
+        return;
+      }
+
+      countEl.textContent = filtered.length + (filtered.length === 1 ? ' manuscript' : ' manuscripts');
+
+      filtered.forEach((book, i) => {
+        const card = document.createElement('div');
+        card.className = 'book-card';
+        card.setAttribute('role', 'listitem');
+        card.style.animationDelay = (i * 0.05) + 's';
+
+        const hasRead     = book.readLink && book.readLink !== '#';
+        const hasDownload = book.downloadLink && book.downloadLink !== '#';
+
+        card.innerHTML = `
+          <span class="cat-badge">${escapeHtml(book.category)}</span>
+          <h2 class="book-title">${escapeHtml(book.title)}</h2>
+          <div class="book-divider"></div>
+          <div class="book-meta"><strong>Author:</strong>    <span>${escapeHtml(book.author)}</span></div>
+          <div class="book-meta"><strong>Language:</strong>  <span>${escapeHtml(book.language)}</span></div>
+          <div class="book-meta"><strong>Publisher:</strong> <span>${escapeHtml(book.publisher)}</span></div>
+          <div class="book-meta"><strong>Year:</strong>      <span>${escapeHtml(book.year)}</span></div>
+          <div class="card-actions">
+            <button
+              class="btn btn-read"
+              data-read="${hasRead ? escapeHtml(book.readLink) : ''}"
+              data-title="${escapeHtml(book.title)}"
+              data-download="${hasDownload ? escapeHtml(book.downloadLink) : ''}"
+              ${!hasRead ? 'disabled title="Reader not available yet"' : ''}
+              aria-label="Read ${escapeHtml(book.title)} online"
+            >📖 Read Online</button>
+            ${hasDownload
+              ? `<a href="${escapeHtml(book.downloadLink)}" class="btn btn-download"
+                   download="${escapeHtml(book.fileName || book.title + '.pdf')}"
+                   aria-label="Download ${escapeHtml(book.title)}">⬇ Download</a>`
+              : `<button class="btn btn-download" disabled title="Download not available yet" style="opacity:0.45;">⬇ Download</button>`
             }
-        ];
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
 
-        /* --- 2. RENDER CARDS & FILTERING --- */
-        const grid = document.getElementById('book-grid');
-        const filterBtns = document.querySelectorAll('.filter-btn');
+    renderBooks();
 
-        function renderBooks(filterCategory) {
-            grid.innerHTML = '';
-            const filtered = filterCategory === 'All' ? books : books.filter(b => b.category === filterCategory);
-            
-            filtered.forEach(book => {
-                const card = document.createElement('div');
-                card.className = 'book-card';
-                card.innerHTML = `
-                    <h2 class="book-title">${book.title}</h2>
-                    <div class="book-meta"><strong>Author:</strong> ${book.author}</div>
-                    <div class="book-meta"><strong>Category:</strong> ${book.category}</div>
-                    <div class="book-meta"><strong>Language:</strong> ${book.language}</div>
-                    <div class="book-meta"><strong>Publisher:</strong> ${book.publisher}</div>
-                    <div class="card-actions">
-                        <button class="btn btn-read" onclick="openReader('${book.readLink}')">📖 Read Online</button>
-                        <a href="${book.downloadLink}" class="btn btn-download" download="${book.title} - Team trayee.pdf">⬇️ Download</a>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-        // Initialize grid
-        renderBooks('All');
+    /* Filter clicks – event delegation on button group */
+    document.getElementById('filter-container').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderBooks();
+    });
 
-        // Filter functionality
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                renderBooks(e.target.getAttribute('data-filter'));
-            });
-        });
+    /* Search */
+    searchInput.addEventListener('input', e => {
+      currentSearch = e.target.value;
+      renderBooks();
+    });
 
-        /* --- 3. PDF.js READER CONFIGURATION --- */
-        // Set worker (Required for PDF.js)
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    /* Read button – event delegation on grid */
+    grid.addEventListener('click', e => {
+      const btn = e.target.closest('.btn-read');
+      if (!btn || btn.disabled) return;
+      const url      = btn.dataset.read;
+      const title    = btn.dataset.title;
+      const dlLink   = btn.dataset.download;
+      openReader(url, title, dlLink);
+    });
 
-        let pdfDoc = null,
-            pageNum = 1,
-            pageIsRendering = false,
+    /* ─────────────────────────────────────────────
+       3. PDF.js SETUP
+    ───────────────────────────────────────────── */
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+    let pdfDoc           = null;
+    let pageNum          = 1;
+    let pageIsRendering  = false;
+    let pageNumIsPending = null;
+    let currentDownload  = '';
+
+    const canvas        = document.getElementById('pdf-canvas');
+    const ctx           = canvas.getContext('2d');
+    const modal         = document.getElementById('reader-modal');
+    const loader        = document.getElementById('pdf-loader');
+    const errorPanel    = document.getElementById('reader-error');
+    const errorDlLink   = document.getElementById('error-download-link');
+
+    function showLoader(show) {
+      loader.classList.toggle('visible', show);
+      canvas.style.display = show ? 'none' : 'block';
+    }
+
+    function showError(show, dlLink) {
+      errorPanel.classList.toggle('visible', show);
+      if (show) {
+        errorDlLink.href = dlLink || '#';
+        canvas.style.display = 'none';
+        loader.classList.remove('visible');
+      }
+    }
+
+    const renderPage = num => {
+      pageIsRendering  = true;
+      canvas.style.opacity = 0;
+
+      pdfDoc.getPage(num).then(page => {
+        const scale    = Math.min(1.6, (window.innerWidth - 48) / page.getViewport({ scale: 1 }).width);
+        const viewport = page.getViewport({ scale });
+        canvas.height  = viewport.height;
+        canvas.width   = viewport.width;
+
+        page.render({ canvasContext: ctx, viewport }).promise.then(() => {
+          pageIsRendering      = false;
+          canvas.style.opacity = 1;
+          document.getElementById('page-num').textContent = num;
+
+          if (pageNumIsPending !== null) {
+            renderPage(pageNumIsPending);
             pageNumIsPending = null;
-
-        const scale = 1.5,
-              canvas = document.getElementById('pdf-canvas'),
-              ctx = canvas.getContext('2d'),
-              modal = document.getElementById('reader-modal');
-
-        // Render the page
-        const renderPage = num => {
-            pageIsRendering = true;
-            canvas.style.opacity = 0; // Fade out for transition
-
-            pdfDoc.getPage(num).then(page => {
-                const viewport = page.getViewport({ scale });
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                const renderCtx = { canvasContext: ctx, viewport: viewport };
-
-                page.render(renderCtx).promise.then(() => {
-                    pageIsRendering = false;
-                    canvas.style.opacity = 1; // Fade in
-
-                    if (pageNumIsPending !== null) {
-                        renderPage(pageNumIsPending);
-                        pageNumIsPending = null;
-                    }
-                });
-
-                document.getElementById('page-num').textContent = num;
-            });
-        };
-
-        const queueRenderPage = num => {
-            if (pageIsRendering) { pageNumIsPending = num; } 
-            else { renderPage(num); }
-        };
-
-        const showPrevPage = () => {
-            if (pageNum <= 1 || cropperInstance) return;
-            pageNum--;
-            queueRenderPage(pageNum);
-        };
-
-        const showNextPage = () => {
-            if (pageNum >= pdfDoc.numPages || cropperInstance) return;
-            pageNum++;
-            queueRenderPage(pageNum);
-        };
-
-        // Open Modal and Load PDF
-        window.openReader = (url) => {
-            if (url === '#') {
-                alert("Placeholder book. Try 'Ashtanga Hridayam' for the demo!");
-                return;
-            }
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-
-            pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
-                pdfDoc = pdfDoc_;
-                document.getElementById('page-count').textContent = pdfDoc.numPages;
-                renderPage(pageNum);
-            }).catch(err => {
-                alert("Error loading PDF. Ensure the PDF URL supports CORS.");
-                console.error(err);
-            });
-        };
-
-        // Close Modal
-        document.getElementById('close-modal').addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            if(cropperInstance) cancelSnippet(); // Clean up cropper if active
+          }
         });
+      });
+    };
 
-        document.getElementById('prev-page').addEventListener('click', showPrevPage);
-        document.getElementById('next-page').addEventListener('click', showNextPage);
+    const queueRenderPage = num => {
+      if (pageIsRendering) pageNumIsPending = num;
+      else renderPage(num);
+    };
 
-        /* --- 4. SHLOKA SNIPPET TOOL (Cropper.js) --- */
-        let cropperInstance = null;
-        const cropImg = document.getElementById('crop-image');
-        const cropContainer = document.getElementById('crop-image-container');
-        const standardActions = document.getElementById('standard-actions');
-        const cropActions = document.getElementById('crop-actions');
+    /* ─────────────────────────────────────────────
+       4. OPEN / CLOSE MODAL
+    ───────────────────────────────────────────── */
+    function openReader(url, title, dlLink) {
+      /* reset state */
+      pdfDoc = null;
+      pageNum = 1;
+      currentDownload = dlLink || '#';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById('page-num').textContent  = '–';
+      document.getElementById('page-count').textContent = '–';
+      document.getElementById('modal-book-title').textContent = title || '–';
+      showError(false);
+      showLoader(true);
 
-        document.getElementById('start-snippet').addEventListener('click', () => {
-            if(pageIsRendering) return; // Don't crop while turning page
-            
-            // 1. Convert current canvas to image so Cropper can use it
-            cropImg.src = canvas.toDataURL('image/jpeg');
-            
-            // 2. Hide Canvas, Show Cropper UI
-            canvas.style.display = 'none';
-            cropContainer.style.display = 'block';
-            standardActions.style.display = 'none';
-            cropActions.style.display = 'block';
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      modal.focus();
 
-            // 3. Initialize Cropper
-            cropperInstance = new Cropper(cropImg, {
-                viewMode: 1,
-                dragMode: 'crop',
-                background: false,
-                autoCropArea: 0.3, // Start with a small selection box
-                zoomable: false,
-            });
+      pdfjsLib.getDocument(url).promise
+        .then(doc => {
+          pdfDoc = doc;
+          document.getElementById('page-count').textContent = doc.numPages;
+          showLoader(false);
+          renderPage(pageNum);
+        })
+        .catch(() => {
+          showError(true, currentDownload);
         });
+    }
 
-        document.getElementById('confirm-crop').addEventListener('click', () => {
-            if (!cropperInstance) return;
-            
-            // 1. Get the cropped canvas area
-            const croppedCanvas = cropperInstance.getCroppedCanvas({
-                fillColor: '#fff' // White background for transparent PDFs
-            });
+    function closeReader() {
+      modal.style.display    = 'none';
+      document.body.style.overflow = 'auto';
+      if (cropperInstance) cancelSnippet();
+    }
 
-            // 2. Trigger automatic download
-            const link = document.createElement('a');
-            link.download = `Shloka_Snippet_Page_${pageNum}.jpg`;
-            link.href = croppedCanvas.toDataURL('image/jpeg', 0.9);
-            link.click();
+    document.getElementById('close-modal').addEventListener('click', closeReader);
 
-            // 3. Reset UI
-            cancelSnippet();
-        });
+    /* Keyboard: Escape to close, arrows to turn pages */
+    modal.addEventListener('keydown', e => {
+      if (e.key === 'Escape')      closeReader();
+      if (e.key === 'ArrowLeft')   showPrevPage();
+      if (e.key === 'ArrowRight')  showNextPage();
+    });
 
-        function cancelSnippet() {
-            if (cropperInstance) {
-                cropperInstance.destroy();
-                cropperInstance = null;
-            }
-            cropContainer.style.display = 'none';
-            canvas.style.display = 'block';
-            cropActions.style.display = 'none';
-            standardActions.style.display = 'block';
-        }
-        
-        document.getElementById('cancel-crop').addEventListener('click', cancelSnippet);
+    /* Page navigation */
+    function showPrevPage() {
+      if (pageNum <= 1 || cropperInstance || !pdfDoc) return;
+      pageNum--;
+      queueRenderPage(pageNum);
+    }
 
-    </script>
+    function showNextPage() {
+      if (!pdfDoc || pageNum >= pdfDoc.numPages || cropperInstance) return;
+      pageNum++;
+      queueRenderPage(pageNum);
+    }
+
+    document.getElementById('prev-page').addEventListener('click', showPrevPage);
+    document.getElementById('next-page').addEventListener('click', showNextPage);
+
+    /* ─────────────────────────────────────────────
+       5. SHLOKA SNIPPET TOOL (Cropper.js)
+    ───────────────────────────────────────────── */
+    let cropperInstance = null;
+    const cropImg       = document.getElementById('crop-image');
+    const cropContainer = document.getElementById('crop-image-container');
+    const stdActions    = document.getElementById('standard-actions');
+    const cropActions   = document.getElementById('crop-actions');
+    const navControls   = document.getElementById('nav-controls');
+
+    document.getElementById('start-snippet').addEventListener('click', () => {
+      if (pageIsRendering || !pdfDoc) return;
+
+      cropImg.src = canvas.toDataURL('image/jpeg', 0.95);
+
+      canvas.style.display       = 'none';
+      cropContainer.style.display = 'block';
+      stdActions.style.display   = 'none';
+      cropActions.style.display  = 'flex';
+      navControls.style.display  = 'none';
+
+      cropperInstance = new Cropper(cropImg, {
+        viewMode:    1,
+        dragMode:    'crop',
+        background:  false,
+        autoCropArea: 0.3,
+        zoomable:    false,
+      });
+    });
+
+    document.getElementById('confirm-crop').addEventListener('click', () => {
+      if (!cropperInstance) return;
+
+      const croppedCanvas = cropperInstance.getCroppedCanvas({ fillColor: '#fff' });
+      const link = document.createElement('a');
+      link.download = `Shloka_Snippet_Page_${pageNum}.jpg`;
+      link.href     = croppedCanvas.toDataURL('image/jpeg', 0.92);
+      link.click();
+
+      cancelSnippet();
+    });
+
+    function cancelSnippet() {
+      if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+      cropContainer.style.display  = 'none';
+      canvas.style.display         = 'block';
+      cropActions.style.display    = 'none';
+      stdActions.style.display     = 'flex';
+      navControls.style.display    = 'flex';
+    }
+
+    document.getElementById('cancel-crop').addEventListener('click', cancelSnippet);
+  </script>
 </body>
 </html>
