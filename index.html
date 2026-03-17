@@ -5,1107 +5,1091 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Team Trayee – E-Library</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Hind:wght@400;500;600&display=swap"
-        rel="stylesheet" crossorigin="anonymous" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css"
-        rel="stylesheet" crossorigin="anonymous" />
+  <!-- Laila — covers both Devanagari script and Latin characters,
+       so every piece of text in this document uses it. -->
+  <link href="https://fonts.googleapis.com/css2?family=Laila:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" rel="stylesheet" />
 
   <style>
-    /* ═══════════════════════════════════════
-       BRAND TOKENS
-    ═══════════════════════════════════════ */
     :root {
       --maroon:        #6A1B1A;
       --maroon-deep:   #4A1010;
       --maroon-light:  #8B2E2D;
       --bg-page:       #FDEECA;
+      --bg-parchment:  #F5D98B;
       --card-tan:      #C39D5C;
       --card-dark:     #A8843D;
       --text-dark:     #2C1010;
-      --text-card:     #1E0E00;
+      --text-oncard:   #1E0E00;
       --white:         #FFFFFF;
-      --font-display:  'Tiro Devanagari Sanskrit', serif;
-      --font-body:     'Lora', serif;
-      --font-ui:       'Hind', sans-serif;
-
-      /* Reader palette */
-      --r-bg:          #111111;
-      --r-toolbar:     #1A0808;
-      --r-border:      rgba(195,157,92,.22);
-      --r-gold:        #C39D5C;
-      --r-gold-dim:    rgba(195,157,92,.65);
-      --r-btn-bg:      #2A1010;
-      --r-btn-hover:   #3A1818;
+      --font-display:  'Laila', serif;
+      --font-body:     'Laila', serif;
+      --font-ui:       'Laila', sans-serif;
     }
 
-    /* ═══════════════════════════════════════
-       RESET
-    ═══════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+
     body {
-      font-family: var(--font-body);
-      background: var(--bg-page);
+      font-family: 'Laila', serif;
+      background-color: var(--bg-page);
       color: var(--text-dark);
       min-height: 100vh;
     }
 
-    /* Subtle parchment grain */
     body::before {
       content: '';
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 0;
     }
 
-    /* ═══════════════════════════════════════
-       HEADER
-    ═══════════════════════════════════════ */
+    /* ── HEADER ── */
     header {
-      position: relative;
       background: var(--maroon);
       color: var(--white);
       text-align: center;
       padding: 2.8rem 1.5rem 2.2rem;
+      position: relative;
       overflow: hidden;
-      box-shadow: 0 6px 24px rgba(74,16,16,.35);
-      z-index: 1;
+      box-shadow: 0 6px 24px rgba(74,16,16,0.35);
     }
     header::before, header::after {
       content: '';
       position: absolute;
-      width: 80px; height: 80px;
-      border: 2.5px solid rgba(255,255,255,.18);
+      width: 90px; height: 90px;
+      border: 3px solid rgba(255,255,255,0.18);
     }
-    header::before { top: 12px;    left: 12px;  border-right: none; border-bottom: none; }
-    header::after  { bottom: 12px; right: 12px; border-left:  none; border-top:   none; }
-    .header-inner  { position: relative; z-index: 1; }
-    .header-om {
+    header::before { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+    header::after  { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+    .header-inner { position: relative; z-index: 1; }
+    .header-ornament {
+      font-size: 1.3rem;
+      letter-spacing: 0.4em;
+      opacity: 0.55;
+      margin-bottom: 0.5rem;
       font-family: var(--font-display);
-      font-size: 1.2rem;
-      letter-spacing: .4em;
-      opacity: .5;
-      margin-bottom: .45rem;
     }
     header h1 {
       font-family: var(--font-body);
-      font-size: clamp(1.6rem, 4.5vw, 2.7rem);
+      font-size: clamp(1.7rem, 5vw, 2.8rem);
       font-weight: 700;
-      letter-spacing: .04em;
+      letter-spacing: 0.04em;
       line-height: 1.2;
-      margin-bottom: .4rem;
+      margin-bottom: 0.5rem;
     }
     header h1 span {
-      display: block;
       font-family: var(--font-display);
-      font-size: .68em; font-weight: 400;
-      letter-spacing: .12em; opacity: .82;
-      margin-bottom: .15rem;
-    }
-    .header-rule {
-      width: 110px; height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
-      margin: .9rem auto .7rem;
+      font-size: 0.7em;
+      display: block;
+      letter-spacing: 0.12em;
+      opacity: 0.85;
+      font-weight: 400;
+      margin-bottom: 0.2rem;
     }
     header p {
       font-family: var(--font-ui);
-      font-size: .93rem; opacity: .76;
-      max-width: 540px; margin: 0 auto;
+      font-size: 0.95rem;
+      opacity: 0.78;
+      letter-spacing: 0.02em;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .header-divider {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      margin: 1rem auto 0.8rem;
     }
 
-    /* ═══════════════════════════════════════
-       LAYOUT CONTAINER
-    ═══════════════════════════════════════ */
+    /* ── CONTAINER ── */
     .container {
-      position: relative; z-index: 1;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2.4rem 1.2rem 4rem;
+      padding: 2.5rem 1.2rem 4rem;
+      position: relative;
+      z-index: 1;
     }
 
-    /* ═══════════════════════════════════════
-       SEARCH
-    ═══════════════════════════════════════ */
+    /* ── SEARCH ── */
     .search-wrap {
+      max-width: 520px;
+      margin: 0 auto 2rem;
       position: relative;
-      max-width: 500px;
-      margin: 0 auto 1.9rem;
     }
-    .search-wrap input[type="search"] {
+    .search-wrap input {
       width: 100%;
-      padding: .72rem 1.1rem .72rem 2.9rem;
+      padding: 0.75rem 1.2rem 0.75rem 3rem;
       border: 2px solid var(--card-tan);
       border-radius: 50px;
-      background: rgba(255,255,255,.72);
+      background: rgba(255,255,255,0.7);
       font-family: var(--font-ui);
-      font-size: .93rem; color: var(--text-dark);
+      font-size: 0.95rem;
+      color: var(--text-dark);
       outline: none;
-      transition: border-color .22s, box-shadow .22s;
+      transition: border-color 0.25s, box-shadow 0.25s;
     }
-    .search-wrap input[type="search"]:focus {
+    .search-wrap input:focus {
       border-color: var(--maroon);
-      box-shadow: 0 0 0 3px rgba(106,27,26,.11);
+      box-shadow: 0 0 0 3px rgba(106,27,26,0.12);
     }
     .search-icon {
-      position: absolute; left: .95rem; top: 50%;
+      position: absolute;
+      left: 1rem;
+      top: 50%;
       transform: translateY(-50%);
-      font-size: 1rem; pointer-events: none; opacity: .55;
+      color: var(--card-tan);
+      font-size: 1.1rem;
+      pointer-events: none;
     }
 
-    /* ═══════════════════════════════════════
-       FILTERS
-    ═══════════════════════════════════════ */
+    /* ── FILTERS ── */
     .filters {
-      display: flex; flex-wrap: wrap;
+      display: flex;
       justify-content: center;
-      gap: 9px; margin-bottom: 2.2rem;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 2.5rem;
     }
     .filter-btn {
       font-family: var(--font-ui);
-      font-weight: 600; font-size: .86rem;
-      letter-spacing: .04em;
-      padding: 8px 20px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      padding: 9px 22px;
       border-radius: 50px;
       border: 2px solid var(--maroon);
-      background: transparent; color: var(--maroon);
+      background: transparent;
+      color: var(--maroon);
       cursor: pointer;
-      transition: background .2s, color .2s, transform .14s, box-shadow .2s;
+      transition: background 0.22s, color 0.22s, transform 0.15s, box-shadow 0.22s;
     }
-    .filter-btn:hover  { background: rgba(106,27,26,.08); transform: translateY(-1px); }
+    .filter-btn:hover {
+      background: rgba(106,27,26,0.08);
+      transform: translateY(-1px);
+    }
     .filter-btn.active {
-      background: var(--maroon); color: var(--white);
-      box-shadow: 0 4px 14px rgba(106,27,26,.32);
+      background: var(--maroon);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(106,27,26,0.35);
     }
 
-    /* ═══════════════════════════════════════
-       RESULTS COUNT
-    ═══════════════════════════════════════ */
-    .results-label {
+    /* ── RESULTS COUNT ── */
+    .results-count {
       text-align: center;
-      font-family: var(--font-ui); font-size: .8rem;
-      letter-spacing: .05em; color: var(--maroon-light);
-      opacity: .78; margin-bottom: 1.4rem;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      color: var(--maroon-light);
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
     }
 
-    /* ═══════════════════════════════════════
-       BOOK GRID & CARDS
-    ═══════════════════════════════════════ */
+    /* ── BOOK GRID & CARDS ── */
     .book-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 22px;
     }
     .book-card {
-      position: relative; overflow: hidden;
       background: var(--card-tan);
+      border-radius: 14px;
+      padding: 22px 20px 18px;
       border: 1.5px solid var(--card-dark);
-      border-radius: 13px;
-      padding: 20px 18px 16px;
-      display: flex; flex-direction: column;
-      box-shadow: 0 4px 16px rgba(74,16,16,.13),
-                  inset 0 1px 0 rgba(255,255,255,.16);
-      transition: transform .2s ease, box-shadow .2s ease;
-      animation: fadeUp .38s ease both;
+      box-shadow: 0 4px 18px rgba(74,16,16,0.14), inset 0 1px 0 rgba(255,255,255,0.18);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      animation: fadeUp 0.4s ease both;
+      position: relative;
+      overflow: hidden;
     }
     .book-card::before {
-      content: ''; position: absolute; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
-      pointer-events: none; border-radius: inherit;
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      pointer-events: none;
+      border-radius: inherit;
     }
     .book-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 11px 28px rgba(74,16,16,.2);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(74,16,16,0.22);
     }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     .cat-badge {
-      position: relative; z-index: 1;
       display: inline-block;
-      font-family: var(--font-ui); font-size: .68rem; font-weight: 600;
-      letter-spacing: .07em; text-transform: uppercase;
-      background: var(--maroon); color: var(--white);
-      padding: 2px 10px; border-radius: 50px;
-      margin-bottom: 9px;
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      background: var(--maroon);
+      color: var(--white);
+      padding: 3px 10px;
+      border-radius: 50px;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
     }
     .book-title {
-      position: relative; z-index: 1;
       font-family: var(--font-body);
-      font-size: 1.18rem; font-weight: 700;
-      color: var(--maroon); margin-bottom: 10px; line-height: 1.3;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--maroon);
+      margin-bottom: 12px;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
     }
-    .book-rule {
+    .book-divider {
       height: 1px;
       background: linear-gradient(90deg, var(--maroon-light), transparent);
-      opacity: .3; margin-bottom: 10px;
+      opacity: 0.35;
+      margin-bottom: 12px;
     }
     .book-meta {
-      position: relative; z-index: 1;
-      font-family: var(--font-ui); font-size: .84rem;
-      color: var(--text-card); margin-bottom: 4px;
-      display: flex; gap: 6px;
+      font-family: var(--font-ui);
+      font-size: 0.86rem;
+      color: var(--text-oncard);
+      margin-bottom: 5px;
+      display: flex;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
     }
     .book-meta strong {
-      color: var(--maroon); font-weight: 600;
-      min-width: 74px; flex-shrink: 0;
+      color: var(--maroon);
+      font-weight: 600;
+      min-width: 88px;   /* widened from 76px to fit "Commentary:" */
+      flex-shrink: 0;
     }
     .card-actions {
-      position: relative; z-index: 1;
-      margin-top: auto; padding-top: 14px;
-      display: flex; gap: 9px;
+      margin-top: auto;
+      padding-top: 16px;
+      display: flex;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
     }
     .btn {
       flex: 1;
-      display: inline-flex; align-items: center;
-      justify-content: center; gap: 5px;
-      padding: 9px 7px;
-      border: none; border-radius: 7px;
-      font-family: var(--font-ui); font-weight: 600; font-size: .82rem;
-      cursor: pointer; text-decoration: none; text-align: center;
-      transition: opacity .16s, transform .13s;
+      padding: 10px 8px;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: opacity 0.18s, transform 0.15s, box-shadow 0.18s;
     }
-    .btn:hover  { opacity: .88; transform: translateY(-1px); }
-    .btn:active { transform: scale(.97); }
-    .btn:disabled { opacity: .38; cursor: not-allowed; transform: none; }
-    .btn-read     { background: var(--maroon); color: var(--white); box-shadow: 0 3px 10px rgba(106,27,26,.28); }
-    .btn-download { background: #FDEECA; color: var(--maroon); border: 1.5px solid var(--maroon); }
-    .empty-state {
-      grid-column: 1 / -1; text-align: center;
-      padding: 4rem 1rem;
-      font-family: var(--font-body); font-style: italic;
-      color: var(--maroon-light); opacity: .65; font-size: 1.05rem;
-    }
-
-    /* ═══════════════════════════════════════
-       FOOTER
-    ═══════════════════════════════════════ */
-    footer {
-      position: relative; z-index: 1;
+    .btn:hover  { opacity: 0.9; transform: translateY(-1px); }
+    .btn:active { transform: scale(0.97); }
+    .btn-read {
       background: var(--maroon);
-      color: rgba(255,255,255,.62);
-      text-align: center; padding: 1.3rem 1rem;
-      font-family: var(--font-ui); font-size: .8rem; letter-spacing: .03em;
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(106,27,26,0.3);
     }
-    footer strong { color: rgba(255,255,255,.9); }
+    .btn-download {
+      background: var(--bg-page);
+      color: var(--maroon);
+      border: 1.5px solid var(--maroon);
+    }
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 1rem;
+      font-family: var(--font-body);
+      font-style: italic;
+      color: var(--maroon-light);
+      opacity: 0.7;
+      font-size: 1.1rem;
+    }
 
-    /* ═══════════════════════════════════════
-       READER MODAL  (full-screen, dark)
-    ═══════════════════════════════════════ */
+    /* ── READING MODAL ── */
     #reader-modal {
       display: none;
-      position: fixed; inset: 0;
-      background: var(--r-bg);
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 5, 5, 0.97);
       z-index: 1000;
       flex-direction: column;
     }
-
-    /* ─── Toolbar ─── */
     .reader-toolbar {
-      background: var(--r-toolbar);
-      border-bottom: 1px solid var(--r-border);
-      padding: 8px 14px;
+      background: #1A0808;
+      border-bottom: 1px solid rgba(195,157,92,0.25);
+      padding: 12px 16px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-      z-index: 10;
+      gap: 10px;
+      justify-content: space-between;
     }
-
-    /* Book title — takes leftover space */
     .toolbar-title {
       font-family: var(--font-body);
-      font-size: .9rem; font-style: italic;
-      color: var(--r-gold);
-      flex: 1 1 120px; min-width: 0;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-
-    /* Every group of controls */
-    .tb-group {
-      display: flex; align-items: center; gap: 5px; flex-wrap: nowrap;
-    }
-
-    /* Generic toolbar button */
-    .tb-btn {
-      font-family: var(--font-ui); font-size: .78rem; font-weight: 600;
-      background: var(--r-btn-bg); color: #D4A96A;
-      border: 1px solid rgba(195,157,92,.28);
-      padding: 6px 11px; border-radius: 5px;
-      cursor: pointer; white-space: nowrap;
-      transition: background .15s;
-      line-height: 1;
-    }
-    .tb-btn:hover    { background: var(--r-btn-hover); }
-    .tb-btn:disabled { opacity: .35; cursor: not-allowed; }
-
-    /* Colour variants */
-    .tb-btn--snippet  { background: rgba(195,157,92,.12); color: var(--r-gold); border-color: rgba(195,157,92,.4); }
-    .tb-btn--close    { background: rgba(139,30,30,.32);  color: #F5A0A0;        border-color: rgba(139,30,30,.5); }
-    .tb-btn--confirm  { background: rgba(34,120,60,.28);  color: #7EE8A2;        border-color: rgba(34,120,60,.5); }
-    .tb-btn--cancel   { background: rgba(139,30,30,.28);  color: #F5A0A0;        border-color: rgba(139,30,30,.45); }
-    .tb-btn--go       { background: rgba(195,157,92,.18); color: var(--r-gold);  border-color: rgba(195,157,92,.38); padding: 6px 10px; }
-
-    /* Page-jump input */
-    .tb-page-input {
-      width: 52px;
-      padding: 5px 7px;
-      background: #2A1010; color: #D4A96A;
-      border: 1px solid rgba(195,157,92,.35);
-      border-radius: 5px;
-      font-family: var(--font-ui); font-size: .78rem; font-weight: 600;
-      text-align: center; outline: none;
-      /* Hide browser spin arrows */
-      -moz-appearance: textfield;
-    }
-    .tb-page-input::-webkit-inner-spin-button,
-    .tb-page-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-    .tb-page-input:focus { border-color: rgba(195,157,92,.7); }
-
-    .tb-page-sep {
-      font-family: var(--font-ui); font-size: .78rem;
-      color: var(--r-gold-dim); white-space: nowrap;
-    }
-
-    /* Crop actions — hidden until snippet mode */
-    #crop-actions { display: none; }
-
-    /* ─── Scrollable canvas wrapper ─── */
-    .canvas-scroll {
+      font-size: 0.95rem;
+      color: var(--card-tan);
+      font-style: italic;
       flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
+      min-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .toolbar-group {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      padding: 24px 20px 32px;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .toolbar-group button {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: #2A1010;
+      color: #D4A96A;
+      border: 1px solid rgba(195,157,92,0.3);
+      padding: 7px 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.18s;
+      white-space: nowrap;
+    }
+    .toolbar-group button:hover { background: #3A1818; }
+    .page-info {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      color: rgba(195,157,92,0.7);
+      padding: 0 4px;
+      white-space: nowrap;
+    }
+    .btn-snippet      { background: rgba(195,157,92,0.15) !important; color: var(--card-tan) !important; border-color: rgba(195,157,92,0.5) !important; }
+    .btn-close-modal  { background: rgba(139,30,30,0.35) !important;  color: #F5A0A0 !important;         border-color: rgba(139,30,30,0.5) !important; }
+    .btn-confirm-crop { background: rgba(34,120,60,0.3) !important;   color: #7EE8A2 !important;         border-color: rgba(34,120,60,0.5) !important; }
+    .btn-cancel-crop  { background: rgba(139,30,30,0.3) !important;   color: #F5A0A0 !important;         border-color: rgba(139,30,30,0.4) !important; }
+    #crop-actions { display: none; }
+    .canvas-container {
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 20px;
       position: relative;
-      /* Smooth momentum scrolling on iOS */
-      -webkit-overflow-scrolling: touch;
     }
-
-    /* Thin custom scrollbar (Webkit) */
-    .canvas-scroll::-webkit-scrollbar { width: 6px; }
-    .canvas-scroll::-webkit-scrollbar-track { background: #1A0808; }
-    .canvas-scroll::-webkit-scrollbar-thumb { background: rgba(195,157,92,.35); border-radius: 3px; }
-    .canvas-scroll::-webkit-scrollbar-thumb:hover { background: rgba(195,157,92,.6); }
-
-    /* PDF canvas */
-    #pdf-canvas {
-      display: block;
-      max-width: 100%; height: auto;
-      box-shadow: 0 8px 40px rgba(0,0,0,.75);
-      transition: opacity .25s ease;
-      border-radius: 2px;
-    }
-
-    /* ─── Spinner ─── */
     .pdf-loader {
       display: none;
-      position: absolute; inset: 0;
-      align-items: center; justify-content: center;
-      flex-direction: column; gap: 14px;
-      color: var(--r-gold);
-      font-family: var(--font-ui); font-size: .88rem;
-      background: var(--r-bg);
-      z-index: 5;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      color: var(--card-tan);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
     }
-    .pdf-loader.on { display: flex; }
+    .pdf-loader.visible { display: flex; }
     .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid rgba(195,157,92,.18);
-      border-top-color: var(--r-gold);
+      width: 38px; height: 38px;
+      border: 3px solid rgba(195,157,92,0.2);
+      border-top-color: var(--card-tan);
       border-radius: 50%;
-      animation: spin .8s linear infinite;
+      animation: spin 0.85s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ─── Error panel ─── */
-    .pdf-error {
-      display: none;
-      position: absolute; inset: 0;
-      align-items: center; justify-content: center;
-      flex-direction: column; gap: 12px;
-      color: var(--r-gold);
-      font-family: var(--font-ui); font-size: .88rem;
-      text-align: center; padding: 2rem;
-      background: var(--r-bg);
-      z-index: 5;
+    #pdf-canvas {
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+      max-width: 100%;
+      height: auto;
+      transition: opacity 0.28s ease;
+      display: block;
     }
-    .pdf-error.on  { display: flex; }
-    .pdf-error-ico { font-size: 2.4rem; opacity: .45; }
-    .pdf-error a   { color: var(--r-gold); font-weight: 600; text-decoration: underline; }
-
-    /* ─── Snippet / Cropper overlay ─── */
-    #snippet-overlay {
+    #crop-image-container { display: none; max-width: 100%; }
+    #crop-image           { max-width: 100%; }
+    .reader-error {
       display: none;
-      position: absolute; inset: 0;
-      background: var(--r-bg);
-      align-items: center; justify-content: center;
-      z-index: 6;
-      padding: 12px;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--card-tan);
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 2rem;
     }
-    #snippet-overlay.on { display: flex; }
-    #crop-wrap { max-width: 100%; max-height: 100%; overflow: hidden; }
-    #crop-img  { display: block; max-width: 100%; }
+    .reader-error.visible { display: flex; }
+    .reader-error-icon { font-size: 2.5rem; opacity: 0.5; }
+    .reader-error a { color: var(--card-tan); font-weight: 600; text-decoration: underline; opacity: 0.9; }
 
-    /* ═══════════════════════════════════════
-       RESPONSIVE — mobile toolbar stacks
-    ═══════════════════════════════════════ */
+    /* ── FOOTER ── */
+    footer {
+      background: var(--maroon);
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+      padding: 1.4rem 1rem;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      position: relative;
+      z-index: 1;
+    }
+    footer strong { color: rgba(255,255,255,0.9); }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
-      .reader-toolbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 6px;
-        padding: 8px 10px;
-      }
-      .toolbar-title { display: none; }
-      .tb-group { justify-content: center; width: 100%; }
-      .tb-btn, .tb-btn--go { flex: 1; padding: 7px 6px; font-size: .75rem; }
-      .tb-page-input { width: 48px; font-size: .75rem; }
+      .reader-toolbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .toolbar-title  { display: none; }
+      .toolbar-group  { width: 100%; }
+      .toolbar-group button { flex: 1; font-size: 0.78rem; padding: 7px 8px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════ HEADER ══════════════ -->
-<header>
-  <div class="header-inner">
-    <div class="header-om">✦ ॐ ✦</div>
-    <h1><span>Team Trayee</span>E-Library</h1>
-    <div class="header-rule"></div>
-    <p>Preserving and exploring the profound wisdom of ancient Sanskrit literature</p>
+  <header>
+    <div class="header-inner">
+      <div class="header-ornament">✦ ॐ ✦</div>
+      <h1>
+        <span>Team Trayee</span>
+        E-Library
+      </h1>
+      <div class="header-divider"></div>
+      <p>Preserving and exploring the profound wisdom of ancient Sanskrit literature</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" id="search-input" placeholder="Search by title or author…" aria-label="Search books" />
+    </div>
+
+    <div class="filters" id="filter-container" role="group" aria-label="Filter by category">
+      <button class="filter-btn active" data-filter="All">All</button>
+      <button class="filter-btn" data-filter="Ayurveda">Ayurveda</button>
+      <button class="filter-btn" data-filter="Vyakarana">Vyakarana</button>
+      <button class="filter-btn" data-filter="Vedanta">Vedanta</button>
+      <button class="filter-btn" data-filter="Kavya">Kavya</button>
+    </div>
+
+    <div class="results-count" id="results-count" aria-live="polite"></div>
+    <div class="book-grid" id="book-grid" role="list"></div>
   </div>
-</header>
 
-<!-- ══════════════ MAIN ══════════════ -->
-<div class="container">
+  <footer>
+    <strong>Team Trayee – E-Library</strong> &nbsp;|&nbsp; Dedicated to the promotion of Sanskrit knowledge
+  </footer>
 
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="search" id="search-input"
-           placeholder="Search by title or author…"
-           aria-label="Search books" />
-  </div>
+  <div id="reader-modal" role="dialog" aria-modal="true" aria-labelledby="modal-book-title" tabindex="-1">
+    <div class="reader-toolbar">
+      <div class="toolbar-title" id="modal-book-title">–</div>
 
-  <div class="filters" id="filter-bar"
-       role="group" aria-label="Filter by category">
-    <button class="filter-btn active" data-filter="All">All</button>
-    <button class="filter-btn" data-filter="Ayurveda">Ayurveda</button>
-    <button class="filter-btn" data-filter="Vyakarana">Vyakarana</button>
-    <button class="filter-btn" data-filter="Vedanta">Vedanta</button>
-    <button class="filter-btn" data-filter="Kavya">Kavya</button>
-  </div>
+      <div class="toolbar-group" id="nav-controls">
+        <button id="prev-page" aria-label="Previous page">⬅ Prev</button>
+        <span class="page-info">
+          <span id="page-num">–</span> / <span id="page-count">–</span>
+        </span>
+        <button id="next-page" aria-label="Next page">Next ➡</button>
+      </div>
 
-  <div class="results-label" id="results-label" aria-live="polite"></div>
-  <div class="book-grid"     id="book-grid"     role="list"></div>
+      <div class="toolbar-group" id="standard-actions">
+        <button class="btn-snippet" id="start-snippet" aria-label="Take a snippet of the current page">✂️ Snippet</button>
+        <button class="btn-close-modal" id="close-modal" aria-label="Close reader">✖ Close</button>
+      </div>
 
-</div>
-
-<!-- ══════════════ FOOTER ══════════════ -->
-<footer>
-  <strong>Team Trayee – E-Library</strong>
-  &nbsp;|&nbsp; Dedicated to the promotion of Sanskrit knowledge
-</footer>
-
-<!-- ══════════════════════════════════════════════
-     READER MODAL
-══════════════════════════════════════════════ -->
-<div id="reader-modal"
-     role="dialog" aria-modal="true"
-     aria-labelledby="modal-title" tabindex="-1">
-
-  <!-- ── Toolbar ── -->
-  <div class="reader-toolbar">
-
-    <!-- Book title -->
-    <div class="toolbar-title" id="modal-title">–</div>
-
-    <!-- Navigation + page-jump (hidden during snippet mode) -->
-    <div class="tb-group" id="nav-group">
-      <button class="tb-btn" id="btn-prev" aria-label="Previous page">⬅ Prev</button>
-      <button class="tb-btn" id="btn-next" aria-label="Next page">Next ➡</button>
-
-      <!-- Jump-to-page input -->
-      <input  class="tb-page-input"
-              type="number" id="page-jump-input"
-              min="1" value="1"
-              aria-label="Jump to page number" />
-      <span class="tb-page-sep" id="page-total-label">/ –</span>
-      <button class="tb-btn tb-btn--go" id="btn-go"
-              aria-label="Go to page">Go</button>
-    </div>
-
-    <!-- Standard actions (hidden during snippet mode) -->
-    <div class="tb-group" id="std-actions">
-      <button class="tb-btn tb-btn--snippet" id="btn-snippet"
-              aria-label="Take snippet of current page">✂️ Snippet</button>
-      <button class="tb-btn tb-btn--close"   id="btn-close"
-              aria-label="Close reader">✖ Close</button>
-    </div>
-
-    <!-- Crop actions (visible only during snippet mode) -->
-    <div class="tb-group" id="crop-actions">
-      <button class="tb-btn tb-btn--confirm" id="btn-confirm-crop"
-              aria-label="Download cropped snippet">✅ Download Snippet</button>
-      <button class="tb-btn tb-btn--cancel"  id="btn-cancel-crop"
-              aria-label="Cancel snippet">❌ Cancel</button>
-    </div>
-
-  </div><!-- /.reader-toolbar -->
-
-  <!-- ── Scrollable canvas area ── -->
-  <div class="canvas-scroll" id="canvas-scroll">
-
-    <!-- Spinner -->
-    <div class="pdf-loader" id="pdf-loader">
-      <div class="spinner"></div>
-      <span id="loader-msg">Loading manuscript…</span>
-    </div>
-
-    <!-- Error panel -->
-    <div class="pdf-error" id="pdf-error">
-      <div class="pdf-error-ico">📜</div>
-      <p id="pdf-error-msg">Could not load the PDF.</p>
-      <p><a id="pdf-error-dl" href="#">Download the file instead ⬇</a></p>
-    </div>
-
-    <!-- PDF page canvas -->
-    <canvas id="pdf-canvas"></canvas>
-
-    <!-- Snippet / Cropper overlay -->
-    <div id="snippet-overlay">
-      <div id="crop-wrap">
-        <img id="crop-img" src="" alt="Page for cropping" />
+      <div class="toolbar-group" id="crop-actions">
+        <button class="btn-confirm-crop" id="confirm-crop" aria-label="Download cropped snippet">✅ Download Snippet</button>
+        <button class="btn-cancel-crop"  id="cancel-crop"  aria-label="Cancel snippet">❌ Cancel</button>
       </div>
     </div>
 
-  </div><!-- /.canvas-scroll -->
+    <div class="canvas-container" id="canvas-container">
+      <div class="pdf-loader" id="pdf-loader">
+        <div class="spinner"></div>
+        <span>Loading manuscript…</span>
+      </div>
+      <div class="reader-error" id="reader-error">
+        <div class="reader-error-icon">📜</div>
+        <p>This PDF could not be loaded in the browser reader.<br>This is usually due to cross-origin restrictions.</p>
+        <p><a id="error-download-link" href="#">Download the file instead ⬇</a></p>
+      </div>
+      <canvas id="pdf-canvas"></canvas>
+      <div id="crop-image-container">
+        <img id="crop-image" src="" alt="Page ready for cropping" />
+      </div>
+    </div>
+  </div>
 
-</div><!-- /#reader-modal -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"
+          crossorigin="anonymous"></script>
 
+  <script>
+    /* ══════════════════════════════════════════════════════
+       BOOK DATA  — 16 Vyakarana books (real data)
+       + original Ayurveda / Vedanta / Kavya placeholders
 
-<!-- ══════════════════════════════════════════════
-     EXTERNAL SCRIPTS
-     crossorigin="anonymous" → real error messages
-     instead of the generic "Script error."
-══════════════════════════════════════════════ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"
-        crossorigin="anonymous"></script>
+       NEW FIELDS added:
+         editor      — scholarly editor of the edition
+         commentary  — commentary texts included
+         (both are optional; cards skip them when empty)
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
+       readLink     → local ./books/ path (GitHub Pages safe)
+       downloadLink → '#' placeholder; replace with Drive URLs
+    ══════════════════════════════════════════════════════ */
+    const books = [
 
-  /* ══════════════════════════════════════════════════
-     PDF.js worker — absolute URL avoids "Invalid URL"
-     errors on file:// origins and GitHub Pages
-  ══════════════════════════════════════════════════ */
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      /* ── वैयाकरणसिद्धान्तकौमुदी (4 vols) ── */
+      {
+        title:       'वैयाकरणसिद्धान्तकौमुदी - १',
+        author:      'भट्टोजी दीक्षितः',
+        editor:      'पं. गिरिधरशर्मा चतुर्वेदः',
+        commentary:  'बालमनोरमा & तत्त्वबोधिनी',
+        publisher:   'मोतीलाल बनारसीदास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/kaumudi 1 - Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'वैयाकरणसिद्धान्तकौमुदी - २',
+        author:      'भट्टोजी दीक्षितः',
+        editor:      'पं. गिरिधरशर्मा चतुर्वेदः',
+        commentary:  'बालमनोरमा & तत्त्वबोधिनी',
+        publisher:   'मोतीलाल बनारसीदास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/kaumudi 2 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'वैयाकरणसिद्धान्तकौमुदी - ३',
+        author:      'भट्टोजी दीक्षितः',
+        editor:      'पं. गिरिधरशर्मा चतुर्वेदः',
+        commentary:  'बालमनोरमा & तत्त्वबोधिनी',
+        publisher:   'मोतीलाल बनारसीदास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/kaumudi 3 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'वैयाकरणसिद्धान्तकौमुदी - ४',
+        author:      'भट्टोजी दीक्षितः',
+        editor:      'पं. गिरिधरशर्मा चतुर्वेदः',
+        commentary:  'बालमनोरमा & तत्त्वबोधिनी',
+        publisher:   'मोतीलाल बनारसीदास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/kaumudi 4 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
 
-  /* ══════════════════════════════════════════════════
-     BOOK DATA
-     readLink    → local ./books/ path (works on GitHub Pages)
-     downloadLink→ direct Google Drive URL (no target="_blank")
-  ══════════════════════════════════════════════════ */
-  var books = [
-    {
-      title:        'Ashtanga Hridayam',
-      author:       'Vagbhata',
-      category:     'Ayurveda',
-      language:     'Sanskrit',
-      publisher:    'Chaukambha Orientalia',
-      year:         '2024',
-      readLink:     'books/Ashhtaanga-Hrudaya - Team Trayee (1).pdf',
-      downloadLink: 'books/Ashhtaanga-Hrudaya - Team Trayee (1).pdf'
-    },
-    {
-      title:        'Charaka Samhita',
-      author:       'Charaka',
-      category:     'Ayurveda',
-      language:     'Sanskrit',
-      publisher:    'Chaukambha Sanskrit Pratishthan',
-      year:         '2019',
-      readLink:     null, downloadLink: null
-    },
-    {
-      title:        'Siddhanta Kaumudi',
-      author:       'Bhattoji Dikshita',
-      category:     'Vyakarana',
-      language:     'Sanskrit',
-      publisher:    'Motilal Banarsidass',
-      year:         '2020',
-      readLink:     null, downloadLink: null
-    },
-    {
-      title:        'Brahma Sutra Bhashya',
-      author:       'Adi Shankaracharya',
-      category:     'Vedanta',
-      language:     'Sanskrit',
-      publisher:    'Gita Press Gorakhpur',
-      year:         '2018',
-      readLink:     null, downloadLink: null
-    },
-    {
-      title:        'Meghadutam',
-      author:       'Kalidasa',
-      category:     'Kavya',
-      language:     'Sanskrit',
-      publisher:    'Sahitya Akademi',
-      year:         '2015',
-      readLink:     null, downloadLink: null
+      /* ── पाणिनीय-अष्टाध्यायी-प्रवचनम् (6 vols)
+            No commentary column in source spreadsheet   ── */
+      {
+        title:       'पाणिनीय-अष्टाध्यायी-प्रवचनम् - १',
+        author:      'डा. सुदर्शनदेव आचार्य',
+        editor:      'आर्यभाषा',
+        commentary:  '',
+        publisher:   'ब्रह्मर्षि स्वामी विरजानन्द आर्ष धर्मार्थ न्यास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Paniniya_Ashtadhyayi_Pravachanam_Part_01 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'पाणिनीय-अष्टाध्यायी-प्रवचनम् - २',
+        author:      'डा. सुदर्शनदेव आचार्य',
+        editor:      'आर्यभाषा',
+        commentary:  '',
+        publisher:   'ब्रह्मर्षि स्वामी विरजानन्द आर्ष धर्मार्थ न्यास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Paniniya_Ashtadhyayi_Pravachanam_Part_02 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'पाणिनीय-अष्टाध्यायी-प्रवचनम् - ३',
+        author:      'डा. सुदर्शनदेव आचार्य',
+        editor:      'आर्यभाषा',
+        commentary:  '',
+        publisher:   'ब्रह्मर्षि स्वामी विरजानन्द आर्ष धर्मार्थ न्यास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Paniniya_Ashtadhyayi_Pravachanam_Part_03 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'पाणिनीय-अष्टाध्यायी-प्रवचनम् - ४',
+        author:      'डा. सुदर्शनदेव आचार्य',
+        editor:      'आर्यभाषा',
+        commentary:  '',
+        publisher:   'ब्रह्मर्षि स्वामी विरजानन्द आर्ष धर्मार्थ न्यास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Paniniya_Ashtadhyayi_Pravachanam_Part_04 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'पाणिनीय-अष्टाध्यायी-प्रवचनम् - ५',
+        author:      'डा. सुदर्शनदेव आचार्य', /* fixed Bengali-script encoding error in source */
+        editor:      'आर्यभाषा',
+        commentary:  '',
+        publisher:   'ब्रह्मर्षि स्वामी विरजानन्द आर्ष धर्मार्थ न्यास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Paniniya_Ashtadhyayi_Pravachanam_Part_05 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'पाणिनीय-अष्टाध्यायी-प्रवचनम् - ६',
+        author:      'डा. सुदर्शनदेव आचार्य',
+        editor:      'आर्यभाषा',
+        commentary:  '',
+        publisher:   'ब्रह्मर्षि स्वामी विरजानन्द आर्ष धर्मार्थ न्यास',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Paniniya_Ashtadhyayi_Pravachanam_Part_06 -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+
+      /* ── महाभाष्यम् (6 vols) ── */
+      {
+        title:       'महाभाष्यम् - १',
+        author:      'भगवान् पतञ्जलिः',
+        editor:      'भार्गवशास्त्री',
+        commentary:  'प्रदीपः, उद्योतः & छाया',
+        publisher:   'चौखम्बा संस्कृत प्रतिष्ठान',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Mahabhashya_I -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'महाभाष्यम् - २',
+        author:      'भगवान् पतञ्जलिः',
+        editor:      'भार्गवशास्त्री',
+        commentary:  'प्रदीपः, उद्योतः & छाया',
+        publisher:   'चौखम्बा संस्कृत प्रतिष्ठान',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Mahabhashya_II - Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'महाभाष्यम् - ३',
+        author:      'भगवान् पतञ्जलिः',
+        editor:      'भार्गवशास्त्री',
+        commentary:  'प्रदीपः, उद्योतः & छाया',
+        publisher:   'चौखम्बा संस्कृत प्रतिष्ठान',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Mahabhashya_III -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'महाभाष्यम् - ४',
+        author:      'भगवान् पतञ्जलिः',
+        editor:      'भार्गवशास्त्री',
+        commentary:  'प्रदीपः, उद्योतः & छाया',
+        publisher:   'चौखम्बा संस्कृत प्रतिष्ठान',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Mahabhashya_IV - Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'महाभाष्यम् - ५',
+        author:      'भगवान् पतञ्जलिः',
+        editor:      'भार्गवशास्त्री',
+        commentary:  'प्रदीपः, उद्योतः & छाया',
+        publisher:   'चौखम्बा संस्कृत प्रतिष्ठान',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Mahabhashya_V -Team Trayee.pdf',
+        downloadLink: '#'
+      },
+      {
+        title:       'महाभाष्यम् - ६',
+        author:      'भगवान् पतञ्जलिः',
+        editor:      'भार्गवशास्त्री',
+        commentary:  'प्रदीपः, उद्योतः & छाया',
+        publisher:   'चौखम्बा संस्कृत प्रतिष्ठान',
+        category:    'Vyakarana',
+        language:    'Sanskrit',
+        readLink:    './books/Mahabhashya_VI - Team Trayee.pdf',
+        downloadLink: '#'
+      },
+
+      /* ── Ayurveda placeholders ── */
+      {
+        title:        'Ashtanga Hridayam',
+        author:       'Vagbhata',
+        editor:       '',
+        commentary:   '',
+        category:     'Ayurveda',
+        language:     'Sanskrit',
+        publisher:    'Chaukambha Orientalia',
+        readLink:     'books/Ashhtaanga-Hrudaya - Team Trayee (1).pdf',
+        downloadLink: 'books/Ashhtaanga-Hrudaya - Team Trayee (1).pdf'
+      },
+      {
+        title:        'Charaka Samhita',
+        author:       'Charaka',
+        editor:       '',
+        commentary:   '',
+        category:     'Ayurveda',
+        language:     'Sanskrit',
+        publisher:    'Chaukambha Sanskrit Pratishthan',
+        readLink:     null,
+        downloadLink: null
+      },
+
+      /* ── Vedanta placeholders ── */
+      {
+        title:        'Brahma Sutra Bhashya',
+        author:       'Adi Shankaracharya',
+        editor:       '',
+        commentary:   '',
+        category:     'Vedanta',
+        language:     'Sanskrit',
+        publisher:    'Gita Press Gorakhpur',
+        readLink:     null,
+        downloadLink: null
+      },
+      {
+        title:        'Vivekachudamani',
+        author:       'Adi Shankaracharya',
+        editor:       '',
+        commentary:   '',
+        category:     'Vedanta',
+        language:     'Sanskrit',
+        publisher:    'Ramakrishna Math',
+        readLink:     null,
+        downloadLink: null
+      },
+
+      /* ── Kavya placeholders ── */
+      {
+        title:        'Meghadutam',
+        author:       'Kalidasa',
+        editor:       '',
+        commentary:   '',
+        category:     'Kavya',
+        language:     'Sanskrit',
+        publisher:    'Sahitya Akademi',
+        readLink:     null,
+        downloadLink: null
+      },
+      {
+        title:        'Raghuvamsham',
+        author:       'Kalidasa',
+        editor:       '',
+        commentary:   '',
+        category:     'Kavya',
+        language:     'Sanskrit',
+        publisher:    'Chaukambha Vidyabhavan',
+        readLink:     null,
+        downloadLink: null
+      }
+    ];
+
+    /* ══════════════════════════════════════════════════════
+       DOM REFERENCES  (unchanged from master)
+    ══════════════════════════════════════════════════════ */
+    const grid        = document.getElementById('book-grid');
+    const countEl     = document.getElementById('results-count');
+    const filterBtns  = document.querySelectorAll('.filter-btn');
+    const searchInput = document.getElementById('search-input');
+
+    let currentFilter = 'All';
+    let currentSearch = '';
+
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.appendChild(document.createTextNode(str || ''));
+      return d.innerHTML;
     }
-  ];
 
-  /* ══════════════════════════════════════════════════
-     DOM REFERENCES
-  ══════════════════════════════════════════════════ */
-  var grid          = document.getElementById('book-grid');
-  var resultsLabel  = document.getElementById('results-label');
-  var searchInput   = document.getElementById('search-input');
-  var filterBar     = document.getElementById('filter-bar');
+    /* ══════════════════════════════════════════════════════
+       renderBooks()  — updated to show editor & commentary
+       All other logic (filter, search, buttons) unchanged.
+    ══════════════════════════════════════════════════════ */
+    function renderBooks() {
+      const query    = currentSearch.trim().toLowerCase();
+      const filtered = books.filter(b => {
+        const catMatch   = currentFilter === 'All' || b.category === currentFilter;
+        const queryMatch = !query ||
+          b.title.toLowerCase().includes(query) ||
+          b.author.toLowerCase().includes(query);
+        return catMatch && queryMatch;
+      });
 
-  var modal         = document.getElementById('reader-modal');
-  var modalTitle    = document.getElementById('modal-title');
+      grid.innerHTML = '';
 
-  // Toolbar elements
-  var navGroup      = document.getElementById('nav-group');
-  var stdActions    = document.getElementById('std-actions');
-  var cropActions   = document.getElementById('crop-actions');
-  var btnPrev       = document.getElementById('btn-prev');
-  var btnNext       = document.getElementById('btn-next');
-  var pageJumpInput = document.getElementById('page-jump-input');
-  var pageTotalLbl  = document.getElementById('page-total-label');
-  var btnGo         = document.getElementById('btn-go');
-  var btnSnippet    = document.getElementById('btn-snippet');
-  var btnClose      = document.getElementById('btn-close');
-  var btnConfirm    = document.getElementById('btn-confirm-crop');
-  var btnCancel     = document.getElementById('btn-cancel-crop');
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="empty-state">No manuscripts found matching your search.</div>';
+        countEl.textContent = '0 books';
+        return;
+      }
 
-  // Canvas / scroll area
-  var canvasScroll  = document.getElementById('canvas-scroll');
-  var pdfCanvas     = document.getElementById('pdf-canvas');
-  var ctx           = pdfCanvas.getContext('2d');
+      countEl.textContent =
+        filtered.length + (filtered.length === 1 ? ' manuscript' : ' manuscripts');
 
-  // Loader / error
-  var pdfLoader     = document.getElementById('pdf-loader');
-  var loaderMsg     = document.getElementById('loader-msg');
-  var pdfError      = document.getElementById('pdf-error');
-  var pdfErrorMsg   = document.getElementById('pdf-error-msg');
-  var pdfErrorDl    = document.getElementById('pdf-error-dl');
+      filtered.forEach((book, i) => {
+        const card = document.createElement('div');
+        card.className = 'book-card';
+        card.setAttribute('role', 'listitem');
+        card.style.animationDelay = (i * 0.05) + 's';
 
-  // Snippet overlay
-  var snippetOverlay= document.getElementById('snippet-overlay');
-  var cropImg       = document.getElementById('crop-img');
+        /* hasRead / hasDownload: treat '#' same as null/missing */
+        const hasRead     = Boolean(book.readLink)     && book.readLink     !== '#';
+        const hasDownload = Boolean(book.downloadLink) && book.downloadLink !== '#';
 
-  /* ══════════════════════════════════════════════════
-     STATE
-  ══════════════════════════════════════════════════ */
-  var currentFilter   = 'All';
-  var currentSearch   = '';
-  var currentDlLink   = '';
+        /* Conditional rows — rendered only when field is non-empty */
+        const editorRow = (book.editor && book.editor.trim())
+          ? `<div class="book-meta"><strong>Editor:</strong><span>${escapeHtml(book.editor)}</span></div>`
+          : '';
 
-  var pdfDoc          = null;   // PDFDocumentProxy
-  var totalPages      = 0;
-  var currentPage     = 1;
-  var pageRendering   = false;
-  var pendingPage     = null;
-  var cropperInstance = null;
+        const commentaryRow = (book.commentary && book.commentary.trim())
+          ? `<div class="book-meta"><strong>Commentary:</strong><span>${escapeHtml(book.commentary)}</span></div>`
+          : '';
 
-  /* ══════════════════════════════════════════════════
-     UTILITY: XSS-safe string for innerHTML contexts
-  ══════════════════════════════════════════════════ */
-  function safe(str) {
-    var d = document.createElement('div');
-    d.appendChild(document.createTextNode(str || ''));
-    return d.innerHTML;
-  }
+        card.innerHTML = `
+          <span class="cat-badge">${escapeHtml(book.category)}</span>
+          <h2 class="book-title">${escapeHtml(book.title)}</h2>
+          <div class="book-divider"></div>
+          <div class="book-meta"><strong>Author:</strong><span>${escapeHtml(book.author)}</span></div>
+          ${editorRow}
+          ${commentaryRow}
+          <div class="book-meta"><strong>Language:</strong><span>${escapeHtml(book.language)}</span></div>
+          <div class="book-meta"><strong>Publisher:</strong><span>${escapeHtml(book.publisher)}</span></div>
+          <div class="card-actions">
+            <button
+              class="btn btn-read"
+              data-read="${hasRead ? escapeHtml(book.readLink) : ''}"
+              data-title="${escapeHtml(book.title)}"
+              data-download="${hasDownload ? escapeHtml(book.downloadLink) : ''}"
+              ${!hasRead ? 'disabled title="Reader not available yet"' : ''}
+              aria-label="Read ${escapeHtml(book.title)} online"
+            >📖 Read Online</button>
 
-  /* ══════════════════════════════════════════════════
-     LOADER / ERROR HELPERS
-  ══════════════════════════════════════════════════ */
-  function loaderOn(msg) {
-    pdfLoader.classList.add('on');
-    loaderMsg.textContent = msg || 'Loading manuscript…';
-    pdfCanvas.style.display = 'none';
-  }
-  function loaderOff() {
-    pdfLoader.classList.remove('on');
-    pdfCanvas.style.display = 'block';
-  }
-  function errorOn(msg, dlLink) {
-    pdfError.classList.add('on');
-    pdfErrorMsg.textContent = msg || 'Could not load the PDF.';
-    pdfErrorDl.href         = dlLink || '#';
-    pdfLoader.classList.remove('on');
-    pdfCanvas.style.display = 'none';
-  }
-  function errorOff() { pdfError.classList.remove('on'); }
+            ${hasDownload
+              ? `<a
+                   href="${escapeHtml(book.downloadLink)}"
+                   class="btn btn-download"
+                   download="${escapeHtml(book.title)} - Team trayee.pdf"
+                   aria-label="Download ${escapeHtml(book.title)}"
+                 >⬇ Download</a>`
+              : `<button class="btn btn-download" disabled
+                   title="Download coming soon"
+                   style="opacity:0.45;">⬇ Download</button>`
+            }
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
 
-  /* ══════════════════════════════════════════════════
-     TOOLBAR STATE HELPERS
-  ══════════════════════════════════════════════════ */
-  function syncToolbar() {
-    // Keep jump input in sync with current page
-    pageJumpInput.value = currentPage;
-    pageTotalLbl.textContent = '/ ' + (totalPages || '–') + ' pages';
-    // Disable prev/next at boundaries
-    btnPrev.disabled = currentPage <= 1;
-    btnNext.disabled = !pdfDoc || currentPage >= totalPages;
-  }
+    renderBooks();
 
-  /* ══════════════════════════════════════════════════
-     PDF PAGE RENDERING
-  ══════════════════════════════════════════════════ */
-  function renderPage(num) {
-    if (!pdfDoc) return;
-    pageRendering     = true;
-    pdfCanvas.style.opacity = '0';
-
-    pdfDoc.getPage(num).then(function (page) {
-      // Responsive scale: fit the scroll-area width minus padding
-      var availW   = canvasScroll.clientWidth - 40;
-      var naturalW = page.getViewport({ scale: 1 }).width;
-      var scale    = Math.min(2.0, Math.max(0.5, availW / naturalW));
-      var viewport = page.getViewport({ scale: scale });
-
-      pdfCanvas.width  = viewport.width;
-      pdfCanvas.height = viewport.height;
-
-      page.render({ canvasContext: ctx, viewport: viewport }).promise
-        .then(function () {
-          pageRendering           = false;
-          pdfCanvas.style.opacity = '1';
-          currentPage             = num;
-          syncToolbar();
-
-          // Scroll the canvas area back to top for the new page
-          canvasScroll.scrollTop = 0;
-
-          // Handle any page that was queued while this one was rendering
-          if (pendingPage !== null) {
-            var next = pendingPage;
-            pendingPage = null;
-            renderPage(next);
-          }
-        })
-        .catch(function (err) {
-          pageRendering = false;
-          console.error('[TT] render error p' + num + ':', err);
-          errorOn('Page render failed: ' + err.message, currentDlLink);
-        });
-    }).catch(function (err) {
-      pageRendering = false;
-      console.error('[TT] getPage error p' + num + ':', err);
-      errorOn('Could not get page ' + num + ': ' + err.message, currentDlLink);
+    /* Filter */
+    document.getElementById('filter-container').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderBooks();
     });
-  }
 
-  function queuePage(num) {
-    // Clamp to valid range
-    num = Math.max(1, Math.min(num, totalPages));
-    if (pageRendering) { pendingPage = num; }
-    else               { renderPage(num); }
-  }
+    /* Search */
+    searchInput.addEventListener('input', e => {
+      currentSearch = e.target.value;
+      renderBooks();
+    });
 
-  /* ══════════════════════════════════════════════════
-     OPEN READER
-  ══════════════════════════════════════════════════ */
-  function openReader(url, title, dlLink) {
-    // ── Reset all state ──
-    pdfDoc        = null;
-    totalPages    = 0;
-    currentPage   = 1;
-    pendingPage   = null;
-    pageRendering = false;
-    currentDlLink = dlLink || '';
+    /* Read button — event delegation */
+    grid.addEventListener('click', e => {
+      const btn = e.target.closest('.btn-read');
+      if (!btn || btn.disabled) return;
+      openReader(btn.dataset.read, btn.dataset.title, btn.dataset.download);
+    });
 
-    ctx.clearRect(0, 0, pdfCanvas.width, pdfCanvas.height);
-    modalTitle.textContent  = title || '–';
-    pageJumpInput.value     = 1;
-    pageTotalLbl.textContent = '/ –';
-    btnPrev.disabled        = true;
-    btnNext.disabled        = true;
+    /* ══════════════════════════════════════════════════════
+       PDF.js  (unchanged from master)
+    ══════════════════════════════════════════════════════ */
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    errorOff();
-    snippetOverlay.classList.remove('on');
-    navGroup.style.display    = 'flex';
-    stdActions.style.display  = 'flex';
-    cropActions.style.display = 'none';
+    let pdfDoc           = null;
+    let pageNum          = 1;
+    let pageIsRendering  = false;
+    let pageNumIsPending = null;
+    let currentDownload  = '';
 
-    loaderOn('Loading manuscript…');
-    modal.style.display          = 'flex';
-    document.body.style.overflow = 'hidden';
-    modal.focus();
+    const canvas      = document.getElementById('pdf-canvas');
+    const ctx         = canvas.getContext('2d');
+    const modal       = document.getElementById('reader-modal');
+    const loader      = document.getElementById('pdf-loader');
+    const errorPanel  = document.getElementById('reader-error');
+    const errorDlLink = document.getElementById('error-download-link');
 
-    /* ── PDF.js load with try/catch + .catch ── */
-    try {
-      var task = pdfjsLib.getDocument(url);
+    function showLoader(show) {
+      loader.classList.toggle('visible', show);
+      canvas.style.display = show ? 'none' : 'block';
+    }
 
-      task.promise
-        .then(function (doc) {
-          pdfDoc     = doc;
-          totalPages = doc.numPages;
-          pageJumpInput.max = totalPages;
-          loaderOff();
-          syncToolbar();
-          renderPage(1);
-        })
-        .catch(function (err) {
-          console.error('[TT] getDocument failed:', err);
-          var msg = buildErrMsg(err, url);
-          errorOn(msg, currentDlLink);
-          alert('⚠️ ' + msg);
+    function showError(show, dlLink) {
+      errorPanel.classList.toggle('visible', show);
+      if (show) {
+        errorDlLink.href     = dlLink || '#';
+        canvas.style.display = 'none';
+        loader.classList.remove('visible');
+      }
+    }
+
+    const renderPage = num => {
+      pageIsRendering      = true;
+      canvas.style.opacity = 0;
+
+      pdfDoc.getPage(num).then(page => {
+        const scale    = Math.min(1.6, (window.innerWidth - 48) / page.getViewport({ scale: 1 }).width);
+        const viewport = page.getViewport({ scale });
+        canvas.height  = viewport.height;
+        canvas.width   = viewport.width;
+
+        page.render({ canvasContext: ctx, viewport }).promise.then(() => {
+          pageIsRendering      = false;
+          canvas.style.opacity = 1;
+          document.getElementById('page-num').textContent = num;
+          if (pageNumIsPending !== null) {
+            renderPage(pageNumIsPending);
+            pageNumIsPending = null;
+          }
         });
+      });
+    };
 
-    } catch (e) {
-      console.error('[TT] getDocument threw:', e);
-      var msg = 'PDF reader error: ' + (e.message || String(e));
-      errorOn(msg, currentDlLink);
-      alert('⚠️ ' + msg);
+    const queueRenderPage = num => {
+      if (pageIsRendering) pageNumIsPending = num;
+      else renderPage(num);
+    };
+
+    function openReader(url, title, dlLink) {
+      pdfDoc = null;
+      pageNum = 1;
+      currentDownload = dlLink || '#';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById('page-num').textContent   = '–';
+      document.getElementById('page-count').textContent = '–';
+      document.getElementById('modal-book-title').textContent = title || '–';
+      showError(false);
+      showLoader(true);
+
+      modal.style.display          = 'flex';
+      document.body.style.overflow = 'hidden';
+      modal.focus();
+
+      pdfjsLib.getDocument(url).promise
+        .then(doc => {
+          pdfDoc = doc;
+          document.getElementById('page-count').textContent = doc.numPages;
+          showLoader(false);
+          renderPage(pageNum);
+        })
+        .catch(() => showError(true, currentDownload));
     }
-  }
 
-  function buildErrMsg(err, url) {
-    if (!err) return 'Could not load the PDF.';
-    var m = err.message || '';
-    if (m.indexOf('404') !== -1 || err.status === 404)
-      return 'File not found (404). Check that "' + url
-           + '" exists in your repo and GitHub Pages has deployed.';
-    if (m.toLowerCase().indexOf('cors') !== -1)
-      return 'CORS error — the server blocked the PDF request. '
-           + 'Try downloading the file instead.';
-    return 'PDF load error: ' + m;
-  }
-
-  /* ══════════════════════════════════════════════════
-     CLOSE READER
-  ══════════════════════════════════════════════════ */
-  function closeReader() {
-    if (cropperInstance) cancelSnippet();
-    modal.style.display          = 'none';
-    document.body.style.overflow = 'auto';
-    errorOff();
-    loaderOff();
-    snippetOverlay.classList.remove('on');
-    pdfDoc = null;
-  }
-
-  btnClose.addEventListener('click', closeReader);
-
-  // Keyboard shortcuts inside modal
-  modal.addEventListener('keydown', function (e) {
-    // Don't intercept arrow keys when the number input is focused
-    if (document.activeElement === pageJumpInput) return;
-    switch (e.key) {
-      case 'Escape':     closeReader();          break;
-      case 'ArrowLeft':  goToPrev();             break;
-      case 'ArrowRight': goToNext();             break;
+    function closeReader() {
+      modal.style.display          = 'none';
+      document.body.style.overflow = 'auto';
+      if (cropperInstance) cancelSnippet();
     }
-  });
 
-  /* ══════════════════════════════════════════════════
-     PREV / NEXT
-  ══════════════════════════════════════════════════ */
-  function goToPrev() {
-    if (!pdfDoc || currentPage <= 1 || cropperInstance) return;
-    queuePage(currentPage - 1);
-  }
-  function goToNext() {
-    if (!pdfDoc || currentPage >= totalPages || cropperInstance) return;
-    queuePage(currentPage + 1);
-  }
+    document.getElementById('close-modal').addEventListener('click', closeReader);
 
-  btnPrev.addEventListener('click', goToPrev);
-  btnNext.addEventListener('click', goToNext);
+    modal.addEventListener('keydown', e => {
+      if (e.key === 'Escape')     closeReader();
+      if (e.key === 'ArrowLeft')  showPrevPage();
+      if (e.key === 'ArrowRight') showNextPage();
+    });
 
-  /* ══════════════════════════════════════════════════
-     PAGE JUMP  (input + Go button + Enter key)
-  ══════════════════════════════════════════════════ */
-  function doJump() {
-    if (!pdfDoc) return;
-    var target = parseInt(pageJumpInput.value, 10);
-    if (isNaN(target)) return;
-    target = Math.max(1, Math.min(target, totalPages));
-    pageJumpInput.value = target;   // correct out-of-range values visually
-    if (target !== currentPage) {
-      queuePage(target);
+    function showPrevPage() {
+      if (pageNum <= 1 || cropperInstance || !pdfDoc) return;
+      pageNum--;
+      queueRenderPage(pageNum);
     }
-  }
-
-  btnGo.addEventListener('click', doJump);
-
-  pageJumpInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      doJump();
-      pageJumpInput.blur(); // dismiss mobile keyboard
+    function showNextPage() {
+      if (!pdfDoc || pageNum >= pdfDoc.numPages || cropperInstance) return;
+      pageNum++;
+      queueRenderPage(pageNum);
     }
-  });
 
-  // Prevent leaving the input blank; restore current page on blur
-  pageJumpInput.addEventListener('blur', function () {
-    if (pageJumpInput.value === '' || isNaN(parseInt(pageJumpInput.value, 10))) {
-      pageJumpInput.value = currentPage;
-    }
-  });
+    document.getElementById('prev-page').addEventListener('click', showPrevPage);
+    document.getElementById('next-page').addEventListener('click', showNextPage);
 
-  /* ══════════════════════════════════════════════════
-     SHLOKA SNIPPET TOOL
-     ─────────────────────────────────────────────────
-     a) canvas → JPEG DataURL
-     b) hide canvas / show overlay <img>
-     c) init Cropper.js
-     d) confirm → getCroppedCanvas → download → restore
-  ══════════════════════════════════════════════════ */
-  btnSnippet.addEventListener('click', function () {
-    if (pageRendering || !pdfDoc) return;
+    /* ══════════════════════════════════════════════════════
+       SHLOKA SNIPPET TOOL  (unchanged from master)
+    ══════════════════════════════════════════════════════ */
+    let cropperInstance = null;
+    const cropImg       = document.getElementById('crop-image');
+    const cropContainer = document.getElementById('crop-image-container');
+    const stdActions    = document.getElementById('standard-actions');
+    const cropActions   = document.getElementById('crop-actions');
+    const navControls   = document.getElementById('nav-controls');
 
-    // a) capture current canvas
-    var dataURL = pdfCanvas.toDataURL('image/jpeg', 0.95);
-
-    // b) show overlay
-    cropImg.src = dataURL;
-    snippetOverlay.classList.add('on');
-
-    // c) swap toolbar
-    navGroup.style.display    = 'none';
-    stdActions.style.display  = 'none';
-    cropActions.style.display = 'flex';
-
-    // d) init Cropper (rAF lets the img paint first)
-    requestAnimationFrame(function () {
+    document.getElementById('start-snippet').addEventListener('click', () => {
+      if (pageIsRendering || !pdfDoc) return;
+      cropImg.src                  = canvas.toDataURL('image/jpeg', 0.95);
+      canvas.style.display         = 'none';
+      cropContainer.style.display  = 'block';
+      stdActions.style.display     = 'none';
+      cropActions.style.display    = 'flex';
+      navControls.style.display    = 'none';
       cropperInstance = new Cropper(cropImg, {
-        viewMode:     1,
-        dragMode:     'crop',
-        background:   false,
-        autoCropArea: 0.35,
-        zoomable:     false,
-        responsive:   true
+        viewMode: 1, dragMode: 'crop', background: false,
+        autoCropArea: 0.3, zoomable: false,
       });
     });
-  });
 
-  // Confirm — download crop
-  btnConfirm.addEventListener('click', function () {
-    if (!cropperInstance) return;
-    var cropped = cropperInstance.getCroppedCanvas({ fillColor: '#fff' });
-    var link    = document.createElement('a');
-    link.download = 'Shloka_Snippet.jpg';
-    link.href     = cropped.toDataURL('image/jpeg', 0.92);
-    link.click();
-    cancelSnippet();
-  });
-
-  // Cancel — restore reader
-  function cancelSnippet() {
-    if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
-    snippetOverlay.classList.remove('on');
-    cropActions.style.display = 'none';
-    navGroup.style.display    = 'flex';
-    stdActions.style.display  = 'flex';
-  }
-  btnCancel.addEventListener('click', cancelSnippet);
-
-  /* ══════════════════════════════════════════════════
-     BOOK CARD RENDERING
-  ══════════════════════════════════════════════════ */
-  function renderBooks() {
-    var q = currentSearch.trim().toLowerCase();
-    var list = books.filter(function (b) {
-      var catOk   = currentFilter === 'All' || b.category === currentFilter;
-      var queryOk = !q
-        || b.title.toLowerCase().indexOf(q)  !== -1
-        || b.author.toLowerCase().indexOf(q) !== -1;
-      return catOk && queryOk;
+    document.getElementById('confirm-crop').addEventListener('click', () => {
+      if (!cropperInstance) return;
+      const croppedCanvas = cropperInstance.getCroppedCanvas({ fillColor: '#fff' });
+      const link = document.createElement('a');
+      link.download = `Shloka_Snippet_Page_${pageNum}.jpg`;
+      link.href     = croppedCanvas.toDataURL('image/jpeg', 0.92);
+      link.click();
+      cancelSnippet();
     });
 
-    grid.innerHTML = '';
-
-    if (!list.length) {
-      grid.innerHTML = '<div class="empty-state">No manuscripts found.</div>';
-      resultsLabel.textContent = '';
-      return;
+    function cancelSnippet() {
+      if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+      cropContainer.style.display = 'none';
+      canvas.style.display        = 'block';
+      cropActions.style.display   = 'none';
+      stdActions.style.display    = 'flex';
+      navControls.style.display   = 'flex';
     }
 
-    resultsLabel.textContent =
-      list.length + (list.length === 1 ? ' manuscript' : ' manuscripts');
-
-    list.forEach(function (book, i) {
-      var hasRead = Boolean(book.readLink);
-      var hasDl   = Boolean(book.downloadLink);
-
-      // Download anchor: no target="_blank"; download="Title - Team trayee.pdf"
-      var dlBtn = hasDl
-        ? '<a href="' + safe(book.downloadLink) + '"'
-          + ' class="btn btn-download"'
-          + ' download="' + safe(book.title) + ' - Team trayee.pdf"'
-          + ' aria-label="Download ' + safe(book.title) + '"'
-          + '>⬇ Download</a>'
-        : '<button class="btn btn-download" disabled'
-          + ' title="Not available yet" style="opacity:.38">⬇ Download</button>';
-
-      var card = document.createElement('div');
-      card.className = 'book-card';
-      card.setAttribute('role', 'listitem');
-      card.style.animationDelay = (i * 0.05) + 's';
-
-      card.innerHTML =
-        '<span class="cat-badge">' + safe(book.category) + '</span>'
-        + '<h2 class="book-title">' + safe(book.title) + '</h2>'
-        + '<div class="book-rule"></div>'
-        + '<div class="book-meta"><strong>Author:</strong><span>'    + safe(book.author)    + '</span></div>'
-        + '<div class="book-meta"><strong>Language:</strong><span>'  + safe(book.language)  + '</span></div>'
-        + '<div class="book-meta"><strong>Publisher:</strong><span>' + safe(book.publisher) + '</span></div>'
-        + '<div class="book-meta"><strong>Year:</strong><span>'      + safe(book.year)      + '</span></div>'
-        + '<div class="card-actions">'
-        +   '<button class="btn btn-read"'
-        +     (hasRead ? '' : ' disabled title="Reader not available yet"')
-        +     ' data-read="'     + (hasRead ? safe(book.readLink)     : '') + '"'
-        +     ' data-title="'    + safe(book.title)  + '"'
-        +     ' data-download="' + (hasDl ? safe(book.downloadLink) : '') + '"'
-        +     ' aria-label="Read ' + safe(book.title) + ' online">'
-        +   '📖 Read Online</button>'
-        +   dlBtn
-        + '</div>';
-
-      grid.appendChild(card);
-    });
-  }
-
-  renderBooks();
-
-  /* ══════════════════════════════════════════════════
-     FILTER & SEARCH EVENT LISTENERS
-  ══════════════════════════════════════════════════ */
-  filterBar.addEventListener('click', function (e) {
-    var btn = e.target.closest('.filter-btn');
-    if (!btn) return;
-    document.querySelectorAll('.filter-btn').forEach(function (b) {
-      b.classList.remove('active');
-    });
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    renderBooks();
-  });
-
-  searchInput.addEventListener('input', function () {
-    currentSearch = searchInput.value;
-    renderBooks();
-  });
-
-  // "Read Online" — event delegation, no global function needed
-  grid.addEventListener('click', function (e) {
-    var btn = e.target.closest('.btn-read');
-    if (!btn || btn.disabled) return;
-    openReader(btn.dataset.read, btn.dataset.title, btn.dataset.download);
-  });
-
-}); // end DOMContentLoaded
-</script>
+    document.getElementById('cancel-crop').addEventListener('click', cancelSnippet);
+  </script>
 </body>
 </html>
